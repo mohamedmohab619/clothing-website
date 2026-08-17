@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, Trash2, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -122,9 +123,13 @@ export default function CartSidebar() {
               <span>${cartTotal.toFixed(2)}</span>
             </div>
           </div>
-          <Button className="w-full mt-2" size="lg">
-            Checkout
-          </Button>
+          <SheetClose asChild>
+            <Link href="/checkout" className="w-full">
+              <Button className="w-full mt-2" size="lg">
+                Checkout
+              </Button>
+            </Link>
+          </SheetClose>
         </SheetFooter>
       )}
     </SheetContent>
