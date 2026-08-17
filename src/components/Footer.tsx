@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 const footerColumns = [
   {
     title: "Product",
@@ -24,13 +27,13 @@ const footerColumns = [
 
 export default function Footer() {
   return (
-    <footer className="mt-auto w-full bg-white">
+    <footer className="mt-auto w-full border-t border-border bg-background text-foreground">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_2fr] lg:gap-16 lg:px-8">
         <div>
-          <p className="text-xl font-bold tracking-[0.2em] text-black uppercase">
+          <p className="text-xl font-bold tracking-[0.2em] text-foreground uppercase">
             Milan
           </p>
-          <p className="mt-4 max-w-sm text-xs leading-relaxed tracking-wide text-neutral-500 uppercase">
+          <p className="mt-4 max-w-sm text-xs leading-relaxed tracking-wide text-muted-foreground uppercase">
             Get newsletters for upcoming products and best offers and discount
             for all items
           </p>
@@ -38,26 +41,27 @@ export default function Footer() {
             <label htmlFor="newsletter-email" className="sr-only">
               Email address
             </label>
-            <input
+            <Input
               id="newsletter-email"
               type="email"
               name="email"
               placeholder="Email address"
-              className="min-w-0 flex-1 border border-neutral-300 px-4 py-2.5 text-sm text-black outline-none placeholder:text-neutral-400 focus:border-black"
+              className="min-w-0 flex-1 rounded-lg"
             />
-            <button
+            <Button
               type="submit"
-              className="bg-black px-6 py-2.5 text-xs font-medium tracking-wide text-white uppercase transition-opacity hover:opacity-90"
+              size="default"
+              className="rounded-lg uppercase tracking-wide"
             >
               Submit
-            </button>
+            </Button>
           </form>
         </div>
 
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {footerColumns.map((column) => (
             <div key={column.title}>
-              <h3 className="text-sm font-bold tracking-wide text-black uppercase">
+              <h3 className="text-sm font-bold tracking-wide text-foreground uppercase">
                 {column.title}
               </h3>
               <ul className="mt-4 flex flex-col gap-2.5">
@@ -65,7 +69,7 @@ export default function Footer() {
                   <li key={link}>
                     <Link
                       href="#"
-                      className="text-xs tracking-wide text-neutral-500 uppercase transition-colors hover:text-black"
+                      className="text-xs tracking-wide text-muted-foreground uppercase transition-colors hover:text-foreground"
                     >
                       {link}
                     </Link>
@@ -77,8 +81,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-neutral-200 bg-neutral-950 px-4 py-4 sm:px-6 lg:px-8">
-        <p className="text-center text-[11px] tracking-wide text-white uppercase">
+      <div className="border-t border-border bg-primary px-4 py-4 sm:px-6 lg:px-8">
+        <p className="text-center text-[11px] tracking-wide text-primary-foreground uppercase">
           © 2026 Milan. All rights reserved.
         </p>
       </div>

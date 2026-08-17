@@ -9,7 +9,7 @@ import WinterCollections from "@/components/WinterCollections";
 
 export default function Home() {
   return (
-    <div className="flex min-h-full flex-col bg-white text-black">
+    <div className="flex min-h-full flex-col bg-background text-foreground">
       <Header />
       <main className="flex flex-1 flex-col">
         <Hero />

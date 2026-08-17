@@ -7,6 +7,7 @@ const products = [
     price: "$39.99",
     originalPrice: "$79.99",
     isFavorite: false,
+    image: "/images/product1.jpg",
   },
   {
     id: "2",
@@ -14,6 +15,7 @@ const products = [
     price: "$39.99",
     originalPrice: "$79.99",
     isFavorite: true,
+    image: "/images/product2.jpg",
   },
   {
     id: "3",
@@ -21,6 +23,7 @@ const products = [
     price: "$39.99",
     originalPrice: "$79.99",
     isFavorite: false,
+    image: "/images/product3.jpg",
   },
   {
     id: "4",
@@ -28,18 +31,22 @@ const products = [
     price: "$39.99",
     originalPrice: "$79.99",
     isFavorite: false,
+    image: "/images/product4.jpg",
   },
 ] as const;
 
 export default function WinterCollections() {
   return (
-    <section id="collections" className="bg-white px-4 py-20 sm:px-6 lg:px-8">
+    <section
+      id="collections"
+      className="bg-background px-4 py-20 text-foreground sm:px-6 lg:px-8"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 text-center">
-          <h2 className="text-3xl font-bold tracking-wide text-black uppercase sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-wide text-foreground uppercase sm:text-4xl">
             Winter collections
           </h2>
-          <p className="mt-4 text-xs tracking-[0.25em] text-neutral-500 uppercase sm:text-sm">
+          <p className="mt-4 text-xs tracking-[0.25em] text-muted-foreground uppercase sm:text-sm">
             Let us love winter for it is the spring of genius
           </p>
         </div>

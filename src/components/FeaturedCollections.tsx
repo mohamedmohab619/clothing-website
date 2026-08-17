@@ -1,68 +1,142 @@
-import Masonry from "@/components/Masonry";
+"use client";
+
+import { useEffect, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { gsap } from "gsap";
+
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const items = [
   {
     id: "jeans",
-    img: "https://picsum.photos/id/1015/600/800?grayscale",
-    url: "#jeans",
-    height: 400,
+    title: "Jeans",
+    src: "/images/jeans.jpg",
+    href: "#jeans",
+    className: "min-h-[180px] md:col-start-1 md:row-start-1 md:min-h-[220px]",
   },
   {
     id: "hoodie",
-    img: "https://picsum.photos/id/1011/600/900?grayscale",
-    url: "#hoodie",
-    height: 600,
+    title: "Hoodie",
+    src: "/images/hoodie.jpg",
+    href: "#hoodie",
+    className:
+      "col-span-2 row-span-2 min-h-[380px] md:col-span-2 md:col-start-2 md:row-span-2 md:row-start-1 md:min-h-0",
+    showDiscover: true,
   },
   {
     id: "bags",
-    img: "https://picsum.photos/id/1020/600/700?grayscale",
-    url: "#bags",
-    height: 300,
+    title: "Bags",
+    src: "/images/bags.jpg",
+    href: "#bags",
+    className: "min-h-[180px] md:col-start-4 md:row-start-1 md:min-h-[220px]",
   },
   {
-    id: "t-shirts",
-    img: "https://picsum.photos/id/1016/600/850?grayscale",
-    url: "#t-shirts",
-    height: 500,
+    id: "tshirts",
+    title: "T-shirts",
+    src: "/images/tshirts.jpg",
+    href: "#t-shirts",
+    className:
+      "row-span-2 min-h-[380px] md:col-start-1 md:row-span-2 md:row-start-2 md:min-h-0",
   },
   {
     id: "sneakers",
-    img: "https://picsum.photos/id/103/600/750?grayscale",
-    url: "#sneakers",
-    height: 350,
+    title: "Sneakers",
+    src: "/images/sneakers.jpg",
+    href: "#sneakers",
+    className:
+      "col-span-2 min-h-[180px] md:col-span-2 md:col-start-2 md:row-start-3 md:min-h-[220px]",
   },
   {
     id: "jacket",
-    img: "https://picsum.photos/id/1005/600/900?grayscale",
-    url: "#jacket",
-    height: 550,
+    title: "Jacket",
+    src: "/images/jacket.jpg",
+    href: "#jacket",
+    className:
+      "row-span-2 min-h-[380px] md:col-start-4 md:row-span-2 md:row-start-2 md:min-h-0",
   },
-];
+] as const;
 
 export default function FeaturedCollections() {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const cards = grid.querySelectorAll("[data-bento-item]");
+    const tween = gsap.fromTo(
+      cards,
+      { opacity: 0, y: 32 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power1.out",
+        stagger: 0.05,
+        clearProps: "transform",
+      }
+    );
+
+    return () => {
+      tween.kill();
+    };
+  }, []);
+
   return (
-    <section className="w-full">
+    <section className="w-full bg-background text-foreground">
       <div className="mb-12 text-center">
-        <h2 className="text-3xl font-bold tracking-wide text-black uppercase sm:text-4xl">
+        <h2 className="text-3xl font-bold tracking-wide text-foreground uppercase sm:text-4xl">
           Featured collections
         </h2>
-        <p className="mt-4 text-xs tracking-[0.2em] text-neutral-500 uppercase sm:text-sm">
+        <p className="mt-4 text-xs tracking-[0.2em] text-muted-foreground uppercase sm:text-sm">
           Top new collections with harfa brand explore now
         </p>
       </div>
 
-      <div className="relative min-h-[600px] w-full sm:min-h-[700px]">
-        <Masonry
-          items={items}
-          ease="power1.out"
-          duration={0.6}
-          stagger={0.05}
-          animateFrom="bottom"
-          scaleOnHover={true}
-          hoverScale={0.95}
-          blurToFocus={true}
-          colorShiftOnHover={false}
-        />
+      <div
+        ref={gridRef}
+        className="grid grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-3 md:auto-rows-[minmax(220px,1fr)]"
+      >
+        {items.map((item) => (
+          <Link
+            key={item.id}
+            href={item.href}
+            data-bento-item
+            className={cn(
+              "group relative overflow-hidden rounded-lg bg-muted",
+              item.className
+            )}
+          >
+            <Image
+              src={item.src}
+              alt={item.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-foreground/50 via-transparent to-transparent"
+              aria-hidden="true"
+            />
+            <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-start gap-3 p-4 sm:p-5">
+              <h3 className="text-lg font-bold tracking-wide text-primary-foreground uppercase sm:text-xl md:text-2xl">
+                {item.title}
+              </h3>
+              {"showDiscover" in item && item.showDiscover && (
+                <span
+                  className={cn(
+                    buttonVariants({ variant: "secondary", size: "sm" }),
+                    "rounded-lg uppercase tracking-wide"
+                  )}
+                >
+                  Discover
+                </span>
+              )}
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );
