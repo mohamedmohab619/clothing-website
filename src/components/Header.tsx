@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
+import CartSidebar from "@/components/CartSidebar";
 
 const navLinks = [
   { href: "#", label: "Men's" },
@@ -23,6 +26,7 @@ type Underline = {
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const { cartCount } = useCart();
   const [underline, setUnderline] = useState<Underline>({ left: 0, width: 0 });
 
   const navRef = useRef<HTMLElement>(null);
@@ -55,8 +59,14 @@ export default function Header() {
   }, [updateUnderline]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-background">
+      <div className="bg-primary px-4 py-2 text-center">
+        <p className="text-[11px] tracking-wide text-primary-foreground/80 uppercase sm:text-xs">
+          Free shipping on orders over $99 | Flash sale up to 40% off
+        </p>
+      </div>
+      <div className="relative border-b border-border">
+      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
           className="shrink-0 text-xl font-bold tracking-[0.2em] text-foreground uppercase"
@@ -112,14 +122,25 @@ export default function Header() {
           >
             <Search className="size-5" strokeWidth={1.5} />
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Shopping cart"
-          >
-            <ShoppingCart className="size-5" strokeWidth={1.5} />
-          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Shopping cart"
+                className="relative"
+              >
+                <ShoppingCart className="size-5" strokeWidth={1.5} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold">
+                    {cartCount}
+                  </span>
+                )}
+              </Button>
+            </SheetTrigger>
+            <CartSidebar />
+          </Sheet>
           <Button
             type="button"
             variant="ghost"
@@ -145,6 +166,7 @@ export default function Header() {
             )}
           </Button>
         </div>
+      </div>
       </div>
 
       {mobileOpen && (
