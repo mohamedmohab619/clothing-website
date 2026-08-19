@@ -8,19 +8,19 @@ const demographics = [
   {
     id: "men",
     label: "Men",
-    href: "#men",
+    href: "/products?category=men",
     image: "/images/men.jpg",
   },
   {
     id: "women",
     label: "Women",
-    href: "#women",
+    href: "/products?category=women",
     image: "/images/women.jpg",
   },
   {
     id: "kids",
     label: "Kids",
-    href: "#kids",
+    href: "/products?category=kids",
     image: "/images/kids.jpg",
   },
 ] as const;

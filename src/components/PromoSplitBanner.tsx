@@ -48,7 +48,7 @@ export default function PromoSplitBanner() {
         </div>
 
         <Link
-          href="#store"
+          href="/products?discount"
           className={cn(
             buttonVariants({ variant: "default", size: "sm" }),
             "mt-8 w-fit rounded-lg uppercase tracking-wide"

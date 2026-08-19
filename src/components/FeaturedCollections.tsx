@@ -13,14 +13,14 @@ const items = [
     id: "jeans",
     title: "Jeans",
     src: "/images/jeans.jpg",
-    href: "#jeans",
+    href: "/products?category=jeans",
     className: "min-h-[180px] md:col-start-1 md:row-start-1 md:min-h-[220px]",
   },
   {
     id: "hoodie",
     title: "Hoodie",
     src: "/images/hoodie.jpg",
-    href: "#hoodie",
+    href: "/products?category=hoodie",
     className:
       "col-span-2 row-span-2 min-h-[380px] md:col-span-2 md:col-start-2 md:row-span-2 md:row-start-1 md:min-h-0",
     showDiscover: true,
@@ -29,14 +29,14 @@ const items = [
     id: "bags",
     title: "Bags",
     src: "/images/bags.jpg",
-    href: "#bags",
+    href: "/products?category=bags",
     className: "min-h-[180px] md:col-start-4 md:row-start-1 md:min-h-[220px]",
   },
   {
     id: "tshirts",
     title: "T-shirts",
     src: "/images/tshirts.jpg",
-    href: "#t-shirts",
+    href: "/products?category=t-shirts",
     className:
       "row-span-2 min-h-[380px] md:col-start-1 md:row-span-2 md:row-start-2 md:min-h-0",
   },
@@ -44,7 +44,7 @@ const items = [
     id: "sneakers",
     title: "Sneakers",
     src: "/images/sneakers.jpg",
-    href: "#sneakers",
+    href: "/products?category=sneakers",
     className:
       "col-span-2 min-h-[180px] md:col-span-2 md:col-start-2 md:row-start-3 md:min-h-[220px]",
   },
@@ -52,7 +52,7 @@ const items = [
     id: "jacket",
     title: "Jacket",
     src: "/images/jacket.jpg",
-    href: "#jacket",
+    href: "/products?category=jacket",
     className:
       "row-span-2 min-h-[380px] md:col-start-4 md:row-span-2 md:row-start-2 md:min-h-0",
   },

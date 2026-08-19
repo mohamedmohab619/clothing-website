@@ -27,7 +27,7 @@ const MOCK_PRODUCTS = [
   { id: "2", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: true, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#ccc", "#000"] },
   { id: "3", title: "RELAXED FIT COR JACKET", price: "$150", originalPrice: "$200", isFavorite: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#008080"] },
   { id: "4", title: "LIGHTWEIGHT PUFFER JK", price: "$120", originalPrice: "$160", isFavorite: false, image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc"] },
-  { id: "5", title: "PACK COTTON HATS", price: "$88", originalPrice: "$100", isFavorite: false, image: "https://images.unsplash.com/photo-1556306535-0f09a536f0bl?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#008000", "#87ceeb"] },
+  { id: "5", title: "PACK COTTON HATS", price: "$88", originalPrice: "$100", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#008000", "#87ceeb"] },
   { id: "6", title: "RIB-KNIT HAT", price: "$75", originalPrice: "$90", isFavorite: true, image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&q=80&w=800", colors: ["#000"] },
   { id: "7", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: true, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#ccc", "#d3d3d3", "#fff"] },
   { id: "8", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: false, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#d3d3d3"] },
@@ -41,19 +41,19 @@ function ProductsContent() {
 
   const removeQueryParam = (key: string, valueToRemove?: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (valueToRemove && (key === 'size' || key === 'color')) {
-       const currentValues = params.get(key)?.split(",") || [];
-       const newValues = currentValues.filter(v => v !== valueToRemove);
-       if (newValues.length > 0) {
-         params.set(key, newValues.join(","));
-       } else {
-         params.delete(key);
-       }
+      const currentValues = params.get(key)?.split(",") || [];
+      const newValues = currentValues.filter(v => v !== valueToRemove);
+      if (newValues.length > 0) {
+        params.set(key, newValues.join(","));
+      } else {
+        params.delete(key);
+      }
     } else {
       params.delete(key);
     }
-    
+
     router.push(pathname + "?" + params.toString(), { scroll: false });
   };
 
@@ -151,7 +151,7 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      
+
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8">
         <div className="text-sm text-muted-foreground mb-8">
           Men Fashion &gt; <span className="text-foreground">All Products</span>
@@ -161,7 +161,7 @@ export default function ProductsPage() {
           <Suspense fallback={<div className="hidden md:block w-64 shrink-0" />}>
             <ProductFilters className="hidden md:block w-64 shrink-0 border-r border-border pr-6" />
           </Suspense>
-          
+
           <div className="flex-1 overflow-hidden">
             <Suspense fallback={<div>Loading products...</div>}>
               <ProductsContent />

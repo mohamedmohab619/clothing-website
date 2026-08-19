@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Heart } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button";
 
@@ -29,7 +30,8 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState(colors?.[0]);
   return (
-    <article className="group flex flex-col gap-3">
+    // TODO: use dynamic id instead of a fixed id
+    <Link href="/product/1" className="group flex flex-col gap-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted">
         <Image
           src={image}
@@ -94,6 +96,6 @@ export default function ProductCard({
           </p>
         </div>
       </div>
-    </article>
+    </Link>
   );
 }
