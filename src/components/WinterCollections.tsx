@@ -1,39 +1,6 @@
 import ProductCard from "@/components/ProductCard";
 
-const products = [
-  {
-    id: "1",
-    title: "Loose fit hoodie",
-    price: "$39.99",
-    originalPrice: "$79.99",
-    isFavorite: false,
-    image: "/images/product1.jpg",
-  },
-  {
-    id: "2",
-    title: "Patterned scarf",
-    price: "$39.99",
-    originalPrice: "$79.99",
-    isFavorite: true,
-    image: "/images/product2.jpg",
-  },
-  {
-    id: "3",
-    title: "Relaxed fit cor jacket",
-    price: "$39.99",
-    originalPrice: "$79.99",
-    isFavorite: false,
-    image: "/images/product3.jpg",
-  },
-  {
-    id: "4",
-    title: "Rib-knit hat",
-    price: "$39.99",
-    originalPrice: "$79.99",
-    isFavorite: false,
-    image: "/images/product4.jpg",
-  },
-] as const;
+import { products } from "@/data/products";
 
 export default function WinterCollections() {
   return (
@@ -53,7 +20,7 @@ export default function WinterCollections() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
+            <ProductCard key={product.id} {...product} showColors={true} />
           ))}
         </div>
       </div>

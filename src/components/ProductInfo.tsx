@@ -19,12 +19,7 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 
-const colors = [
-  { name: "Charcoal Gray", className: "bg-neutral-500" },
-  { name: "Light Gray", className: "bg-neutral-300" },
-  { name: "Beige", className: "bg-[#d6c4a8]" },
-  { name: "Black", className: "bg-neutral-950" },
-] as const;
+import type { Product, ColorOption } from "@/data/products";
 
 const sizes = ["S", "M", "L", "XL", "XXL"] as const;
 
@@ -59,11 +54,18 @@ const bottomTrustItems = [
   },
 ] as const;
 
-export default function ProductInfo() {
-  const [selectedColor, setSelectedColor] = useState<string>(colors[0].name);
+type ProductInfoProps = {
+  product: Product;
+  selectedColorOption: ColorOption | undefined;
+  onColorChange: (option: ColorOption) => void;
+};
+
+export default function ProductInfo({ product, selectedColorOption, onColorChange }: ProductInfoProps) {
   const [selectedSize, setSelectedSize] = useState<(typeof sizes)[number]>("M");
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(product.isFavorite);
   const { addToCart } = useCart();
+
+  const activeColorName = selectedColorOption?.name || "None";
 
   return (
     <div className="flex flex-col">
@@ -72,7 +74,7 @@ export default function ProductInfo() {
       </Badge>
 
       <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-        Essential Oversized Hoodie
+        {product.title}
       </h1>
 
       <div className="mt-3 flex items-center gap-2">
@@ -88,9 +90,9 @@ export default function ProductInfo() {
       </div>
 
       <div className="mt-5 flex flex-wrap items-center gap-3">
-        <p className="text-3xl font-bold text-foreground">$59.99</p>
-        <p className="text-lg text-muted-foreground line-through">$89.99</p>
-        <Badge className="rounded-lg">33% OFF</Badge>
+        <p className="text-3xl font-bold text-foreground">{product.price}</p>
+        <p className="text-lg text-muted-foreground line-through">{product.originalPrice}</p>
+        <Badge className="rounded-lg">SALE</Badge>
       </div>
 
       <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
@@ -100,23 +102,23 @@ export default function ProductInfo() {
 
       <div className="mt-8">
         <p className="text-sm font-medium text-foreground">
-          Color: <span className="font-normal">{selectedColor}</span>
+          Color: <span className="font-normal">{activeColorName}</span>
         </p>
         <div className="mt-3 flex gap-3">
-          {colors.map((color) => (
+          {product.colorOptions?.map((color) => (
             <button
               key={color.name}
               type="button"
               aria-label={color.name}
-              aria-pressed={selectedColor === color.name}
-              onClick={() => setSelectedColor(color.name)}
+              aria-pressed={selectedColorOption?.name === color.name}
+              onClick={() => onColorChange(color)}
               className={cn(
                 "size-8 rounded-full ring-offset-2 ring-offset-background transition-shadow",
-                color.className,
-                selectedColor === color.name
+                selectedColorOption?.name === color.name
                   ? "ring-2 ring-foreground"
                   : "ring-1 ring-border"
               )}
+              style={{ backgroundColor: color.value }}
             />
           ))}
         </div>
@@ -152,16 +154,16 @@ export default function ProductInfo() {
           className="h-12 flex-1 rounded-lg text-sm uppercase tracking-wide transition-transform duration-300 hover:scale-[1.02]"
           onClick={() => {
             addToCart({
-              id: "essential-oversized-hoodie",
-              title: "Essential Oversized Hoodie",
-              price: 59.99,
-              image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800",
+              id: product.id,
+              title: product.title,
+              price: parseFloat(product.price.replace(/[^0-9.-]+/g, "")),
+              image: selectedColorOption?.images[0] || product.image,
               quantity: 1,
-              selectedColor,
+              selectedColor: activeColorName,
               selectedSize,
             });
             toast.success("Added to cart", {
-              description: `Essential Oversized Hoodie (${selectedColor}, ${selectedSize})`,
+              description: `${product.title} (${activeColorName}, ${selectedSize})`,
             });
           }}
         >

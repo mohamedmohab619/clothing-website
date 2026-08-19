@@ -14,7 +14,7 @@ const navLinks = [
   { href: "#", label: "Men's" },
   { href: "#", label: "Woman's" },
   { href: "#", label: "Kid's" },
-  { href: "#", label: "Accessories" },
+  { href: "/products", label: "All products" },
   { href: "#", label: "Gifts" },
 ] as const;
 
