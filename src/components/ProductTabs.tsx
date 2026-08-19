@@ -86,7 +86,7 @@ export default function ProductTabs() {
 
       <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted lg:aspect-[5/4]">
         <Image
-          src="/images/hoodie2.jpg"
+          src="/images/image.png"
           alt="Essentials collection fabric close-up"
           fill
           className="object-cover"

@@ -8,10 +8,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const galleryImages = [
-  { src: "/images/product4.jpg", alt: "Essential oversized hoodie front view" },
-  { src: "/images/product2.jpg", alt: "Essential oversized hoodie side view" },
-  { src: "/images/product1.jpg", alt: "Essential oversized hoodie detail" },
-  { src: "/images/product3.jpg", alt: "Essential oversized hoodie lifestyle" },
+  { src: "/images/dark navy1.jpg", alt: "Essential oversized hoodie front view" },
+  { src: "/images/dark navy2.jpg", alt: "Essential oversized hoodie side view" },
+  { src: "/images/dark navy4.jpg", alt: "Essential oversized hoodie detail" },
+  { src: "/images/dark navy3.jpg", alt: "Essential oversized hoodie lifestyle" },
 ] as const;
 
 export default function ProductGallery() {

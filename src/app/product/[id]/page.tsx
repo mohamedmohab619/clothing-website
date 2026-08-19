@@ -15,8 +15,8 @@ export async function generateMetadata({
   const { id } = await params;
 
   return {
-    title: `Essential Oversized Hoodie | MILAN`,
-    description: `Shop the Essential Oversized Hoodie (product ${id}) at MILAN.`,
+    title: `Essential Oversized Hoodie | AVEN`,
+    description: `Shop the Essential Oversized Hoodie (product ${id}) at AVEN.`,
   };
 }
 

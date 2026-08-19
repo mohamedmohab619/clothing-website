@@ -31,7 +31,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_2fr] lg:gap-16 lg:px-8">
         <div>
           <p className="text-xl font-bold tracking-[0.2em] text-foreground uppercase">
-            Milan
+            AVEN
           </p>
           <p className="mt-4 max-w-sm text-xs leading-relaxed tracking-wide text-muted-foreground uppercase">
             Get newsletters for upcoming products and best offers and discount
@@ -83,7 +83,7 @@ export default function Footer() {
 
       <div className="border-t border-border bg-primary px-4 py-4 sm:px-6 lg:px-8">
         <p className="text-center text-[11px] tracking-wide text-primary-foreground uppercase">
-          © 2026 Milan. All rights reserved.
+          © 2026 AVEN. All rights reserved.
         </p>
       </div>
     </footer>

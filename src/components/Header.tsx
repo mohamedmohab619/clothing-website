@@ -71,7 +71,7 @@ export default function Header() {
           href="/"
           className="shrink-0 text-xl font-bold tracking-[0.2em] text-foreground uppercase"
         >
-          MILAN
+          AVEN
         </Link>
 
         <nav
