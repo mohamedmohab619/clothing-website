@@ -38,7 +38,7 @@ export default function ProductCard({
 
   return (
     // TODO: use dynamic id instead of a fixed id
-    <Link href="/product/1" className="group flex flex-col gap-3">
+    <article className="group flex flex-col gap-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted">
         <Link href={`/products/${id}`} className="absolute inset-0 z-0">
           <span className="sr-only">View {title}</span>
@@ -132,6 +132,6 @@ export default function ProductCard({
           </p>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
