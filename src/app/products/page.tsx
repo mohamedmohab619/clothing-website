@@ -20,19 +20,20 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { products } from "@/data/products";
 
 // Mock Data
 const MOCK_PRODUCTS = [
-  { id: "1", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
-  { id: "2", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: true, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#ccc", "#000"] },
-  { id: "3", title: "RELAXED FIT COR JACKET", price: "$150", originalPrice: "$200", isFavorite: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#008080"] },
-  { id: "4", title: "LIGHTWEIGHT PUFFER JK", price: "$120", originalPrice: "$160", isFavorite: false, image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc"] },
-  { id: "5", title: "PACK COTTON HATS", price: "$88", originalPrice: "$100", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#008000", "#87ceeb"] },
-  { id: "6", title: "RIB-KNIT HAT", price: "$75", originalPrice: "$90", isFavorite: true, image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&q=80&w=800", colors: ["#000"] },
-  { id: "7", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: true, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#ccc", "#d3d3d3", "#fff"] },
-  { id: "8", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: false, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#d3d3d3"] },
-  { id: "9", title: "RELAXED FIT COR JACKET", price: "$150", originalPrice: "$200", isFavorite: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800", colors: ["#ccc", "#d3d3d3", "#fff"] },
+  { id: "11", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
+  { id: "12", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: true, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#ccc", "#000"] },
+  { id: "13", title: "RELAXED FIT COR JACKET", price: "$150", originalPrice: "$200", isFavorite: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#008080"] },
+  { id: "14", title: "LIGHTWEIGHT PUFFER JK", price: "$120", originalPrice: "$160", isFavorite: false, image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc"] },
+  { id: "15", title: "RIB-KNIT HAT", price: "$75", originalPrice: "$90", isFavorite: true, image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&q=80&w=800", colors: ["#000"] },
+  { id: "16", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: false, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#d3d3d3"] },
+  { id: "17", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
 ];
+
+const allData = [...products, ...MOCK_PRODUCTS]
 
 function ProductsContent() {
   const router = useRouter();
@@ -110,7 +111,7 @@ function ProductsContent() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
-        {MOCK_PRODUCTS.map((product) => (
+        {allData.map((product) => (
           <ProductCard
             key={product.id}
             {...product}

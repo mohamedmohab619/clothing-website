@@ -66,4 +66,15 @@ export const products: Product[] = [
       { name: "Ice Blue", value: "#A5F2F3", images: ["/images/ice blue2.jpg", "/images/ice blue5.jpg", "/images/ice blue4.jpg", "/images/ice blue1.jpg"] },
     ],
   },
+  {
+    id: "5",
+    title: "baby blue shirt",
+    price: "$39.99",
+    originalPrice: "$79.99",
+    isFavorite: false,
+    image: "/images/women-shirt1.jpg",
+    colorOptions: [
+      { name: "Baby Blue", value: "#A5F2F3", images: ["/images/women-blue-shirt1.jpg", "/images/women-blue-shirt2.jpg", "/images/women-blue-shirt3.jpg", "/images/women-blue-shirt4.jpg"] },
+    ],
+  },
 ];

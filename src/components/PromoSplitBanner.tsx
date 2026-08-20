@@ -15,14 +15,14 @@ export default function PromoSplitBanner() {
     <section className="grid w-full grid-cols-1 overflow-hidden rounded-lg md:grid-cols-2">
       <div className="relative aspect-[4/3] bg-muted md:aspect-auto md:min-h-[420px]">
         <Image
-          src="/images/sale.jpg"
+          src="/images/youth-cropped-new.jpg"
           alt="Sale Promotion"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 50vw"
         />
         <p
-          className={`${caveat.className} absolute top-6 left-6 z-10 max-w-[12rem] text-3xl leading-tight text-destructive sm:text-4xl`}
+          className={`${caveat.className} absolute top-10 left-6 z-10 max-w-[16rem] text-3xl leading-tight text-destructive sm:text-4xl`}
         >
           Just for collections
         </p>
