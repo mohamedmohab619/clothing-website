@@ -11,11 +11,11 @@ import { useCart } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
 
 const navLinks = [
-  { href: "#", label: "Men's" },
-  { href: "#", label: "Woman's" },
-  { href: "#", label: "Kid's" },
+  { href: "/products?category=men", label: "Men" },
+  { href: "/products?category=women", label: "Woman" },
+  { href: "/products?category=kids", label: "Kids" },
   { href: "/products", label: "All products" },
-  { href: "#", label: "Gifts" },
+  { href: "/products", label: "Gifts" },
 ] as const;
 
 type Underline = {
