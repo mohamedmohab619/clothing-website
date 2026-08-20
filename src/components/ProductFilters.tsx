@@ -71,10 +71,10 @@ export default function ProductFilters({ className }: { className?: string }) {
   const activeCategory = searchParams.get("category");
   const activeSizes = searchParams.get("size")?.split(",") || [];
   const activeColors = searchParams.get("color")?.split(",") || [];
-  
+
   const minPrice = searchParams.get("minPrice") || "100";
   const maxPrice = searchParams.get("maxPrice") || "500";
-  
+
   const [priceRange, setPriceRange] = useState([parseInt(minPrice), parseInt(maxPrice)]);
 
   useEffect(() => {
@@ -83,12 +83,12 @@ export default function ProductFilters({ className }: { className?: string }) {
 
   const handlePriceChange = (value: number | readonly number[]) => {
     if (Array.isArray(value) || (typeof value !== 'number' && 'length' in value)) {
-       setPriceRange(value as number[]);
+      setPriceRange(value as number[]);
     } else {
-       setPriceRange([value as number, priceRange[1]]);
+      setPriceRange([value as number, priceRange[1]]);
     }
   };
-  
+
   const applyPrice = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("minPrice", priceRange[0].toString());
@@ -99,11 +99,11 @@ export default function ProductFilters({ className }: { className?: string }) {
   return (
     <div className={cn("w-full", className)}>
       <h2 className="text-xl font-bold mb-6 text-foreground">Filter Products</h2>
-      
+
       {/* Categories */}
       <div className="mb-8">
         <h3 className="font-semibold mb-2 bg-muted/50 p-2 rounded-md text-foreground">Category</h3>
-        <Accordion type="multiple" defaultValue={["item-1"]} className="w-full">
+        <Accordion defaultValue={["item-1"]} className="w-full">
           <AccordionItem value="item-1" className="border-b-0">
             <AccordionTrigger className="hover:no-underline py-2 text-sm">Men Fashion</AccordionTrigger>
             <AccordionContent>
@@ -111,8 +111,8 @@ export default function ProductFilters({ className }: { className?: string }) {
                 {categories.map((cat) => (
                   <div key={cat} className="flex items-center justify-between group">
                     <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`cat-${cat}`} 
+                      <Checkbox
+                        id={`cat-${cat}`}
                         checked={activeCategory === cat.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}
                         onCheckedChange={(checked) => {
                           const val = cat.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
@@ -172,16 +172,16 @@ export default function ProductFilters({ className }: { className?: string }) {
             <label className="text-xs text-muted-foreground">From</label>
             <div className="relative">
               <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
-              <Input 
-                type="number" 
-                value={priceRange[0]} 
+              <Input
+                type="number"
+                value={priceRange[0]}
                 onChange={(e) => {
                   const val = parseInt(e.target.value) || 0;
                   setPriceRange([val, priceRange[1]]);
                 }}
                 onBlur={applyPrice}
                 onKeyDown={(e) => { if (e.key === 'Enter') applyPrice() }}
-                className="pl-6 h-8 text-sm" 
+                className="pl-6 h-8 text-sm"
               />
             </div>
           </div>
@@ -189,16 +189,16 @@ export default function ProductFilters({ className }: { className?: string }) {
             <label className="text-xs text-muted-foreground">To</label>
             <div className="relative">
               <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
-              <Input 
-                type="number" 
-                value={priceRange[1]} 
+              <Input
+                type="number"
+                value={priceRange[1]}
                 onChange={(e) => {
                   const val = parseInt(e.target.value) || 0;
                   setPriceRange([priceRange[0], val]);
                 }}
                 onBlur={applyPrice}
                 onKeyDown={(e) => { if (e.key === 'Enter') applyPrice() }}
-                className="pl-6 h-8 text-sm" 
+                className="pl-6 h-8 text-sm"
               />
             </div>
           </div>
@@ -238,8 +238,8 @@ export default function ProductFilters({ className }: { className?: string }) {
         <div className="grid grid-cols-2 gap-y-3">
           {sizes.map((s) => (
             <div key={s} className="flex items-center space-x-2 group">
-              <Checkbox 
-                id={`size-${s}`} 
+              <Checkbox
+                id={`size-${s}`}
                 checked={activeSizes.includes(s)}
                 onCheckedChange={() => toggleQueryString("size", s)}
               />
@@ -253,9 +253,9 @@ export default function ProductFilters({ className }: { className?: string }) {
           ))}
         </div>
       </div>
-      
+
       <div className="h-px bg-border my-6" />
-      
+
       <div className="mb-8">
         <h3 className="font-semibold mb-4 bg-muted/50 p-2 rounded-md text-foreground">Brands</h3>
       </div>

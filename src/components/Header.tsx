@@ -66,129 +66,131 @@ export default function Header() {
         </p>
       </div>
       <div className="relative border-b border-border">
-      <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="shrink-0 text-xl font-bold tracking-[0.2em] text-foreground uppercase"
-        >
-          AVEN
-        </Link>
-
-        <nav
-          ref={navRef}
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex"
-          aria-label="Primary"
-          onMouseLeave={() => setHoverIndex(null)}
-        >
-          {navLinks.map((link, index) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              ref={(el) => {
-                linkRefs.current[index] = el;
-              }}
-              onMouseEnter={() => setHoverIndex(index)}
-              onFocus={() => setHoverIndex(index)}
-              onBlur={() => setHoverIndex(null)}
-              className={cn(
-                "relative pb-1 text-sm text-muted-foreground transition-colors",
-                hoverIndex === index && "font-medium text-foreground"
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          <span
-            aria-hidden="true"
-            className={cn(
-              "pointer-events-none absolute bottom-0 h-px bg-foreground transition-[left,width,opacity] duration-300 ease-out",
-              isHovering ? "opacity-100" : "opacity-0"
-            )}
-            style={{
-              left: underline.left,
-              width: underline.width,
-            }}
-          />
-        </nav>
-
-        <div className="flex items-center gap-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Search"
-            className="hidden sm:inline-flex"
+        <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            className="shrink-0 text-xl font-bold tracking-[0.2em] text-foreground uppercase"
           >
-            <Search className="size-5" strokeWidth={1.5} />
-          </Button>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                aria-label="Shopping cart"
-                className="relative"
+            AVEN
+          </Link>
+
+          <nav
+            ref={navRef}
+            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex"
+            aria-label="Primary"
+            onMouseLeave={() => setHoverIndex(null)}
+          >
+            {navLinks.map((link, index) => (
+              <Link
+                key={link.label}
+                href={link.href}
+                ref={(el) => {
+                  linkRefs.current[index] = el;
+                }}
+                onMouseEnter={() => setHoverIndex(index)}
+                onFocus={() => setHoverIndex(index)}
+                onBlur={() => setHoverIndex(null)}
+                className={cn(
+                  "relative pb-1 text-sm text-muted-foreground transition-colors",
+                  hoverIndex === index && "font-medium text-foreground"
+                )}
               >
+                {link.label}
+              </Link>
+            ))}
+
+            <span
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none absolute bottom-0 h-px bg-foreground transition-[left,width,opacity] duration-300 ease-out",
+                isHovering ? "opacity-100" : "opacity-0"
+              )}
+              style={{
+                left: underline.left,
+                width: underline.width,
+              }}
+            />
+          </nav>
+
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label="Search"
+              className="hidden sm:inline-flex"
+            >
+              <Search className="size-5" strokeWidth={1.5} />
+            </Button>
+            <Sheet>
+              <SheetTrigger render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Shopping cart"
+                  className="relative"
+                />
+              }>
                 <ShoppingCart className="size-5" strokeWidth={1.5} />
                 {cartCount > 0 && (
                   <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
-              </Button>
-            </SheetTrigger>
-            <CartSidebar />
-          </Sheet>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label="Account"
-            className="hidden sm:inline-flex"
-          >
-            <User className="size-5" strokeWidth={1.5} />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            className="md:hidden"
-            onClick={() => setMobileOpen((open) => !open)}
-          >
-            {mobileOpen ? (
-              <X className="size-6" strokeWidth={1.5} />
-            ) : (
-              <Menu className="size-6" strokeWidth={1.5} />
-            )}
-          </Button>
+              </SheetTrigger>
+              <CartSidebar />
+            </Sheet>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label="Account"
+              className="hidden sm:inline-flex"
+            >
+              <User className="size-5" strokeWidth={1.5} />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
+              className="md:hidden"
+              onClick={() => setMobileOpen((open) => !open)}
+            >
+              {mobileOpen ? (
+                <X className="size-6" strokeWidth={1.5} />
+              ) : (
+                <Menu className="size-6" strokeWidth={1.5} />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
-      </div>
 
-      {mobileOpen && (
-        <nav
-          className="border-t border-border bg-background px-4 py-4 md:hidden"
-          aria-label="Mobile"
-        >
-          <ul className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <Link
-                  href={link.href}
-                  className="block text-sm font-medium text-muted-foreground"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )}
-    </header>
+      {
+        mobileOpen && (
+          <nav
+            className="border-t border-border bg-background px-4 py-4 md:hidden"
+            aria-label="Mobile"
+          >
+            <ul className="flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <li key={link.label}>
+                  <Link
+                    href={link.href}
+                    className="block text-sm font-medium text-muted-foreground"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+    </header >
   );
 }

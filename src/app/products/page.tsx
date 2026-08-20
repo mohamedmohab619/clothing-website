@@ -71,11 +71,12 @@ function ProductsContent() {
         </p>
         <div className="md:hidden">
           <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm" className="gap-2">
-                <SlidersHorizontal className="size-4" />
-                Filters
-              </Button>
+            <SheetTrigger render={
+
+              <Button variant="outline" size="sm" className="gap-2" />
+            }>
+              <SlidersHorizontal className="size-4" />
+              Filters
             </SheetTrigger>
             <SheetContent side="left" className="w-[300px] sm:w-[400px] overflow-y-auto pr-0">
               <SheetTitle className="sr-only">Filters</SheetTitle>

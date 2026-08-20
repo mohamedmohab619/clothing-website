@@ -26,10 +26,10 @@ export default function CartSidebar() {
           <span className="text-sm font-normal text-muted-foreground bg-muted px-2 py-1 rounded-md">
             {cartCount} {cartCount === 1 ? "item" : "items"}
           </span>
-          <SheetClose asChild>
-            <Button variant="ghost" size="icon" className="size-8 shrink-0" aria-label="Close cart">
-              <X className="size-4" />
-            </Button>
+          <SheetClose render={
+            <Button variant="ghost" size="icon" className="size-8 shrink-0" aria-label="Close cart" />
+          }>
+            <X className="size-4" />
           </SheetClose>
         </div>
       </div>
@@ -69,7 +69,7 @@ export default function CartSidebar() {
                     </div>
                     <p className="font-semibold text-sm text-foreground shrink-0">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center border border-border rounded-md">
                       <Button
@@ -90,7 +90,7 @@ export default function CartSidebar() {
                         <Plus className="size-3 text-muted-foreground" />
                       </Button>
                     </div>
-                    
+
                     <Button
                       variant="ghost"
                       size="icon"
@@ -123,12 +123,12 @@ export default function CartSidebar() {
               <span>${cartTotal.toFixed(2)}</span>
             </div>
           </div>
-          <SheetClose asChild>
-            <Link href="/checkout" className="w-full">
-              <Button className="w-full mt-2" size="lg">
-                Checkout
-              </Button>
-            </Link>
+          <SheetClose render={
+            <Link href="/checkout" className="w-full" />
+          }>
+            <Button className="w-full mt-2" size="lg">
+              Checkout
+            </Button>
           </SheetClose>
         </SheetFooter>
       )}
