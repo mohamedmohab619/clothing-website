@@ -33,8 +33,6 @@ const MOCK_PRODUCTS = [
   { id: "17", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
 ];
 
-const allData = [...products, ...MOCK_PRODUCTS]
-
 function ProductsContent() {
   const router = useRouter();
   const pathname = usePathname();
@@ -111,13 +109,16 @@ function ProductsContent() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
-        {allData.map((product) => (
-          <ProductCard
-            key={product.id}
-            {...product}
-            showColors={true}
-          />
-        ))}
+        {products.flatMap((product) =>
+          product.colorOptions?.map((option, cidx) => (
+            <ProductCard
+              key={`${product.id}-${option.name}`}
+              {...product}
+              selectedCOption={option}
+              showColors={true}
+            />
+          )) ?? []
+        )}
       </div>
 
       <Pagination className="mb-12">

@@ -17,6 +17,7 @@ type ProductCardProps = {
   image: string;
   colors?: string[];
   colorOptions?: ColorOption[];
+  selectedCOption?: ColorOption;
   showColors?: boolean;
 };
 
@@ -29,10 +30,11 @@ export default function ProductCard({
   image,
   colors,
   colorOptions,
+  selectedCOption,
   showColors,
 }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState(colors?.[0]);
-  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(colorOptions?.[0]);
+  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(selectedCOption || colorOptions?.[0]);
 
   const displayImage = selectedColorOption?.images?.[0] || image;
 
@@ -40,7 +42,7 @@ export default function ProductCard({
     // TODO: use dynamic id instead of a fixed id
     <article className="group flex flex-col gap-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted">
-        <Link href={`/products/${id}`} className="absolute inset-0 z-0">
+        <Link href={`/products/${id}?coption=${selectedColorOption?.name}`} className="absolute inset-0 z-0">
           <span className="sr-only">View {title}</span>
         </Link>
         <Image
@@ -77,7 +79,7 @@ export default function ProductCard({
 
       <div className="flex flex-col gap-1 transition-transform duration-300 group-hover:-translate-y-0.5">
         <div className="flex items-start justify-between gap-3">
-          <Link href={`/products/${id}`} className="text-sm font-bold tracking-wide text-foreground uppercase transition-colors group-hover:text-foreground/80 hover:underline">
+          <Link href={`/products/${id}?coption=${selectedColorOption?.name}`} className="text-sm font-bold tracking-wide text-foreground uppercase transition-colors group-hover:text-foreground/80 hover:underline">
             {title}
           </Link>
           <p className="shrink-0 text-sm font-medium text-foreground">{price}</p>

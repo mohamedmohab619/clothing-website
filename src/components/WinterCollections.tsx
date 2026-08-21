@@ -23,7 +23,8 @@ export default function WinterCollections() {
             .filter((product) => Number(product.id) < 5)
             .map((product) => (
               <ProductCard key={product.id} {...product} showColors={true} />
-            ))}
+            ))
+          }
         </div>
       </div>
     </section>

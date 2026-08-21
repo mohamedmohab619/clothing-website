@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductGallery from "@/components/ProductGallery";
@@ -11,11 +11,27 @@ import YouMayAlsoLike from "@/components/YouMayAlsoLike";
 import { products, type ColorOption } from "@/data/products";
 
 export default function ProductPage() {
+  // handling path paramenters for "ID"
   const params = useParams();
   const id = params?.id as string;
-  
+
+  // handling query parameters
+  const searchParams = useSearchParams();
+
   const product = products.find((p) => p.id === id);
-  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(product?.colorOptions?.[0]);
+  const coption = product?.colorOptions?.filter((option) => option.name.toLowerCase() == searchParams.get('coption')?.toLowerCase())[0] || product?.colorOptions?.[0]
+  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(coption);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  function handleColorChange(color: ColorOption) {
+    setSelectedColorOption(color);
+    const params = new URLSearchParams(searchParams);
+    params.set("coption", color.name);
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
 
   if (!product) {
     return (
@@ -41,7 +57,7 @@ export default function ProductPage() {
             <ProductInfo
               product={product}
               selectedColorOption={selectedColorOption}
-              onColorChange={setSelectedColorOption}
+              onColorChange={handleColorChange}
             />
           </div>
           <div className="mt-16 sm:mt-24">
