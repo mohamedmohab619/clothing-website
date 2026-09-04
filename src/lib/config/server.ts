@@ -1,21 +1,27 @@
 import z from "zod";
 
 const envSchema = z.object({
-  DATABASE_URL: z.url().min(1),
+  DATABASE_URL: z.string().url().optional(),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 });
 
 const parseResult = envSchema.safeParse(process.env);
 
 if (!parseResult.success) {
-  console.error(parseResult.error);
-  throw new Error("Environment error");
+  console.warn("Environment variable validation warning:", parseResult.error.format());
 }
+
+const envData = parseResult.success ? parseResult.data : {
+  DATABASE_URL: process.env.DATABASE_URL,
+  NODE_ENV: 'development' as const,
+};
 
 export const serverConfig = {
   db: {
-    url: parseResult.data.DATABASE_URL,
+    url: envData.DATABASE_URL || "",
   },
-  isProduction: parseResult.data.NODE_ENV === 'production',
-  isDevelopment: parseResult.data.NODE_ENV === 'development',
-}
+  isDbConfigured: Boolean(envData.DATABASE_URL),
+  isProduction: envData.NODE_ENV === 'production',
+  isDevelopment: envData.NODE_ENV === 'development',
+};
+

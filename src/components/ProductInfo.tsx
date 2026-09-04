@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import { toast } from "sonner";
 
 import type { Product, ColorOption } from "@/data/products";
@@ -62,10 +63,13 @@ type ProductInfoProps = {
 
 export default function ProductInfo({ product, selectedColorOption, onColorChange }: ProductInfoProps) {
   const [selectedSize, setSelectedSize] = useState<(typeof sizes)[number]>("M");
-  const [isFavorite, setIsFavorite] = useState(product.isFavorite);
+  const { isFavorite: checkIsFavorite, toggleFavorite } = useFavorites();
   const { addToCart } = useCart();
 
   const activeColorName = selectedColorOption?.name || "None";
+  const favorited =
+    checkIsFavorite(product.slug || product.id, activeColorName) ||
+    checkIsFavorite(product.id, activeColorName);
 
   return (
     <div className="flex flex-col">
@@ -96,8 +100,7 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
       </div>
 
       <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
-        Premium heavyweight cotton hoodie with an oversized fit for ultimate
-        comfort and modern style.
+        {product.description || "Premium heavyweight collection with an oversized fit for ultimate comfort and modern style."}
       </p>
 
       <div className="mt-8">
@@ -113,10 +116,10 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
               aria-pressed={selectedColorOption?.name === color.name}
               onClick={() => onColorChange(color)}
               className={cn(
-                "size-8 rounded-full ring-offset-2 ring-offset-background transition-shadow",
+                "size-8 rounded-full ring-offset-2 ring-offset-background transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer",
                 selectedColorOption?.name === color.name
-                  ? "ring-2 ring-foreground"
-                  : "ring-1 ring-border"
+                  ? "ring-2 ring-foreground scale-105"
+                  : "ring-1 ring-border hover:ring-foreground/40"
               )}
               style={{ backgroundColor: color.value }}
             />
@@ -132,13 +135,16 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
           <SizeGuideModal />
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
-          {sizes.map((size) => (
+          {((selectedColorOption as any)?.sizes?.length > 0
+            ? (selectedColorOption as any).sizes
+            : sizes
+          ).map((size: string) => (
             <Button
               key={size}
               type="button"
               variant={selectedSize === size ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedSize(size)}
+              onClick={() => setSelectedSize(size as any)}
               className="h-10 min-w-12 rounded-lg"
             >
               {size}
@@ -174,14 +180,32 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
           type="button"
           variant="outline"
           size="icon-lg"
-          aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
-          aria-pressed={isFavorite}
-          onClick={() => setIsFavorite((open) => !open)}
-          className="size-12 rounded-lg"
+          aria-label={favorited ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={favorited}
+          onClick={() => {
+            toggleFavorite({
+              id: product.id,
+              slug: product.slug,
+              title: product.title,
+              price: product.price,
+              originalPrice: product.originalPrice,
+              image: selectedColorOption?.images[0] || product.image,
+              colorOptions: product.colorOptions,
+              selectedColor: activeColorName,
+              selectedSize,
+            }, selectedColorOption);
+          }}
+          className={cn(
+            "size-12 rounded-lg transition-colors",
+            favorited && "border-rose-300 bg-rose-50 text-rose-500 hover:bg-rose-100 hover:text-rose-600 dark:border-rose-900/50 dark:bg-rose-950/30"
+          )}
         >
           <Heart
-            className="size-5"
-            fill={isFavorite ? "currentColor" : "none"}
+            className={cn(
+              "size-5 transition-colors",
+              favorited ? "fill-rose-500 text-rose-500" : "text-foreground"
+            )}
+            strokeWidth={1.5}
           />
         </Button>
       </div>

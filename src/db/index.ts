@@ -10,6 +10,9 @@ export type DB = ReturnType<typeof drizzle<typeof schema>>;
 let db: DB | null = null;
 
 export function getDB() {
+  if (!serverConfig.db.url) {
+    return null;
+  }
   if (!db) {
     const sql = neon(serverConfig.db.url);
     db = drizzle(sql, {
@@ -22,8 +25,11 @@ export function getDB() {
 
 export async function TestQuery() {
   const db = getDB();
+  if (!db) {
+    throw new Error("DATABASE_URL is not configured.");
+  }
 
-  return await db?.execute(sql`SELECT NOW() as current_time, 1 as status`);
+  return await db.execute(sql`SELECT NOW() as current_time, 1 as status`);
 }
 
 /**
@@ -32,6 +38,9 @@ export async function TestQuery() {
  */
 async function reset() {
   const db = getDB();
+  if (!db) {
+    throw new Error("Database is not configured.");
+  }
 
   // Await truncate execution with RESTART IDENTITY
   await db.execute(
@@ -41,6 +50,9 @@ async function reset() {
 
 export async function seed() {
   const db = getDB();
+  if (!db) {
+    throw new Error("Database is not configured.");
+  }
 
   // 0. reset database
   await reset();

@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Menu, Search, ShoppingCart, User, X } from "lucide-react";
+import { Heart, Menu, Search, ShoppingCart, User, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useFavorites } from "@/context/FavoritesContext";
 import CartSidebar from "@/components/CartSidebar";
+import SearchOverlay from "@/components/SearchOverlay";
 
 const navLinks = [
   { href: "/products?category=men", label: "Men" },
@@ -25,8 +27,10 @@ type Underline = {
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const { cartCount } = useCart();
+  const { favoritesCount } = useFavorites();
   const [underline, setUnderline] = useState<Underline>({ left: 0, width: 0 });
 
   const navRef = useRef<HTMLElement>(null);
@@ -118,9 +122,25 @@ export default function Header() {
               variant="ghost"
               size="icon"
               aria-label="Search"
-              className="hidden sm:inline-flex"
+              className="inline-flex"
+              onClick={() => setIsSearchOpen(true)}
             >
               <Search className="size-5" strokeWidth={1.5} />
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label="Wishlist"
+              className="relative"
+              render={<Link href="/favorites" />}
+            >
+              <Heart className="size-5" strokeWidth={1.5} />
+              {favoritesCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-rose-500 text-white w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold">
+                  {favoritesCount}
+                </span>
+              )}
             </Button>
             <Sheet>
               <SheetTrigger render={
@@ -147,6 +167,7 @@ export default function Header() {
               size="icon"
               aria-label="Account"
               className="hidden sm:inline-flex"
+              render={<Link href="/profile" />}
             >
               <User className="size-5" strokeWidth={1.5} />
             </Button>
@@ -187,10 +208,59 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    setIsSearchOpen(true);
+                  }}
+                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground w-full text-left"
+                >
+                  <Search className="size-4" />
+                  Search
+                </button>
+              </li>
+              <li>
+                <Link
+                  href="/favorites"
+                  className="flex items-center justify-between text-sm font-medium text-muted-foreground"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <Heart className="size-4 text-rose-500" />
+                    Favorites
+                  </span>
+                  {favoritesCount > 0 && (
+                    <span className="bg-rose-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                      {favoritesCount}
+                    </span>
+                  )}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile"
+                  className="flex items-center justify-between text-sm font-medium text-muted-foreground"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <span className="flex items-center gap-2">
+                    <User className="size-4 text-primary" />
+                    My Profile
+                  </span>
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                    VIP
+                  </span>
+                </Link>
+              </li>
             </ul>
           </nav>
         )
       }
-    </header >
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
+    </header>
   );
 }

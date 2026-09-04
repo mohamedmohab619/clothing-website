@@ -6,14 +6,17 @@ import { Heart } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useFavorites } from "@/context/FavoritesContext";
+import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import type { ColorOption } from "@/data/products";
 
 type ProductCardProps = {
   id: string;
+  slug?: string;
   title: string;
   price: string;
   originalPrice: string;
-  isFavorite: boolean;
+  isFavorite?: boolean;
   image: string;
   colors?: string[];
   colorOptions?: ColorOption[];
@@ -23,10 +26,11 @@ type ProductCardProps = {
 
 export default function ProductCard({
   id,
+  slug,
   title,
   price,
   originalPrice,
-  isFavorite,
+  isFavorite: propIsFavorite,
   image,
   colors,
   colorOptions,
@@ -35,14 +39,35 @@ export default function ProductCard({
 }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState(colors?.[0]);
   const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(selectedCOption || colorOptions?.[0]);
+  const { isFavorite: checkIsFavorite, toggleFavorite } = useFavorites();
+  const { addRecentlyViewed } = useRecentlyViewed();
 
+  const activeColorName = selectedColorOption?.name || colors?.[0];
   const displayImage = selectedColorOption?.images?.[0] || image;
+  const productIdentifier = slug || id;
+  const isItemFavorited = checkIsFavorite(productIdentifier, activeColorName) || checkIsFavorite(id, activeColorName);
+
+  const handleRecordView = () => {
+    addRecentlyViewed({
+      id,
+      slug,
+      title,
+      price,
+      originalPrice,
+      image: displayImage,
+      colorOptions,
+      isFavorite: isItemFavorited,
+    });
+  };
 
   return (
-    // TODO: use dynamic id instead of a fixed id
     <article className="group flex flex-col gap-3">
       <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-muted">
-        <Link href={`/products/${id}?coption=${selectedColorOption?.name}`} className="absolute inset-0 z-0">
+        <Link
+          href={`/products/${productIdentifier}?coption=${selectedColorOption?.name}`}
+          onClick={handleRecordView}
+          className="absolute inset-0 z-0"
+        >
           <span className="sr-only">View {title}</span>
         </Link>
         <Image
@@ -61,25 +86,43 @@ export default function ProductCard({
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            // TODO: Toggle favorite
+            toggleFavorite({
+              id,
+              slug,
+              title,
+              price,
+              originalPrice,
+              image: displayImage,
+              colorOptions,
+              selectedColor: activeColorName,
+            }, selectedColorOption);
           }}
           variant="secondary"
           size="icon-sm"
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-          aria-pressed={isFavorite}
-          className="absolute top-3 right-3 z-10 rounded-lg bg-background shadow-sm transition-transform duration-300 group-hover:scale-110"
+          aria-label={isItemFavorited ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={isItemFavorited}
+          className={cn(
+            "absolute top-3 right-3 z-10 rounded-lg bg-background/90 backdrop-blur-xs shadow-sm transition-all duration-300 group-hover:scale-110",
+            isItemFavorited && "text-rose-500 hover:text-rose-600 bg-background"
+          )}
         >
           <Heart
-            className="size-4 text-foreground"
+            className={cn(
+              "size-4 transition-colors",
+              isItemFavorited ? "fill-rose-500 text-rose-500" : "text-foreground"
+            )}
             strokeWidth={1.5}
-            fill={isFavorite ? "currentColor" : "none"}
           />
         </Button>
       </div>
 
       <div className="flex flex-col gap-1 transition-transform duration-300 group-hover:-translate-y-0.5">
         <div className="flex items-start justify-between gap-3">
-          <Link href={`/products/${id}?coption=${selectedColorOption?.name}`} className="text-sm font-bold tracking-wide text-foreground uppercase transition-colors group-hover:text-foreground/80 hover:underline">
+          <Link
+            href={`/products/${productIdentifier}?coption=${selectedColorOption?.name}`}
+            onClick={handleRecordView}
+            className="text-sm font-bold tracking-wide text-foreground uppercase transition-colors group-hover:text-foreground/80 hover:underline"
+          >
             {title}
           </Link>
           <p className="shrink-0 text-sm font-medium text-foreground">{price}</p>

@@ -6,7 +6,10 @@ export type ColorOption = {
 
 export type Product = {
   id: string;
+  slug?: string;
   title: string;
+  name?: string;
+  description?: string;
   price: string;
   originalPrice: string;
   isFavorite: boolean;

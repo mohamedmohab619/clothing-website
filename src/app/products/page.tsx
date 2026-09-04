@@ -20,23 +20,40 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { products } from "@/data/products";
-
-// Mock Data
-const MOCK_PRODUCTS = [
-  { id: "11", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
-  { id: "12", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: true, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#808080", "#ccc", "#000"] },
-  { id: "13", title: "RELAXED FIT COR JACKET", price: "$150", originalPrice: "$200", isFavorite: false, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#008080"] },
-  { id: "14", title: "LIGHTWEIGHT PUFFER JK", price: "$120", originalPrice: "$160", isFavorite: false, image: "https://images.unsplash.com/photo-1544022613-e87ca75a784a?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc"] },
-  { id: "15", title: "RIB-KNIT HAT", price: "$75", originalPrice: "$90", isFavorite: true, image: "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&q=80&w=800", colors: ["#000"] },
-  { id: "16", title: "PATTERNED SCARF", price: "$40", originalPrice: "$60", isFavorite: false, image: "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&q=80&w=800", colors: ["#d3d3d3"] },
-  { id: "17", title: "LOOSE FIT HOODIE", price: "$120", originalPrice: "$150", isFavorite: false, image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&q=80&w=800", colors: ["#000", "#ccc", "#87ceeb"] },
-];
+import { useState, useEffect } from "react";
+import type { Product, ColorOption } from "@/data/products";
 
 function ProductsContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [productsList, setProductsList] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    setIsLoading(true);
+
+    const query = searchParams.toString();
+    fetch(`/api/products?${query}`)
+      .then((res) => res.json())
+      .then((res) => {
+        if (isMounted && res.success && Array.isArray(res.data)) {
+          setProductsList(res.data);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch products:", err);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [searchParams]);
 
   const removeQueryParam = (key: string, valueToRemove?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -62,16 +79,35 @@ function ProductsContent() {
   const activeSizes = searchParams.get("size")?.split(",") || [];
   const activeColors = searchParams.get("color")?.split(",") || [];
 
+  type ProductCardItem = {
+    product: Product;
+    option?: ColorOption;
+    key: string;
+  };
+
+  const productCards: ProductCardItem[] = productsList.flatMap((product): ProductCardItem[] =>
+    product.colorOptions && product.colorOptions.length > 0
+      ? product.colorOptions.map((option) => ({
+          product,
+          option,
+          key: `${product.slug || product.id}-${option.name}`,
+        }))
+      : [{
+          product,
+          option: undefined,
+          key: product.slug || product.id,
+        }]
+  );
+
   return (
     <>
       <div className="flex items-center justify-between mb-6">
         <p className="text-sm text-muted-foreground">
-          Showing <span className="font-bold text-foreground">12</span> results from total <span className="font-bold text-foreground">127</span> for "{activeCategory ? activeCategory.replace(/-/g, ' ') : 'All Products'}"
+          Showing <span className="font-bold text-foreground">{productCards.length}</span> results for "{activeCategory ? activeCategory.replace(/-/g, ' ') : 'All Products'}"
         </p>
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger render={
-
               <Button variant="outline" size="sm" className="gap-2" />
             }>
               <SlidersHorizontal className="size-4" />
@@ -108,18 +144,33 @@ function ProductsContent() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
-        {products.flatMap((product) =>
-          product.colorOptions?.map((option, cidx) => (
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="flex flex-col gap-3 animate-pulse">
+              <div className="aspect-[3/4] bg-muted rounded-lg" />
+              <div className="h-4 bg-muted rounded w-3/4" />
+              <div className="h-3 bg-muted rounded w-1/2" />
+            </div>
+          ))}
+        </div>
+      ) : productCards.length === 0 ? (
+        <div className="py-16 text-center text-muted-foreground">
+          <p className="text-lg font-medium">No products found matching your filters.</p>
+          <p className="text-sm mt-1">Try clearing some of your filters to see more results.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 mb-12">
+          {productCards.map(({ product, option, key }) => (
             <ProductCard
-              key={`${product.id}-${option.name}`}
+              key={key}
               {...product}
               selectedCOption={option}
               showColors={true}
             />
-          )) ?? []
-        )}
-      </div>
+          ))}
+        </div>
+      )}
 
       <Pagination className="mb-12">
         <PaginationContent>

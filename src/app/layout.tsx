@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { CartProvider } from "@/context/CartContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
+import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
 import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -45,8 +47,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <CartProvider>
-          {children}
-          <Toaster />
+          <FavoritesProvider>
+            <RecentlyViewedProvider>
+              {children}
+              <Toaster />
+            </RecentlyViewedProvider>
+          </FavoritesProvider>
         </CartProvider>
       </body>
     </html>

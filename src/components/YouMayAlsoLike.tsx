@@ -1,44 +1,32 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-
 import ProductCard from "@/components/ProductCard";
+import type { Product } from "@/data/products";
 
-const relatedProducts = [
-  {
-    id: "minimal-hoodie",
-    title: "Minimal Hoodie",
-    price: "$54.99",
-    originalPrice: "$74.99",
-    isFavorite: false,
-    image: "/images/hoodie2.jpg",
-  },
-  {
-    id: "classic-sweatshirt",
-    title: "Classic Sweatshirt",
-    price: "$49.99",
-    originalPrice: "$69.99",
-    isFavorite: false,
-    image: "/images/product1.jpg",
-  },
-  {
-    id: "zip-up-hoodie",
-    title: "Zip Up Hoodie",
-    price: "$64.99",
-    originalPrice: "$89.99",
-    isFavorite: true,
-    image: "/images/jacket.jpg",
-  },
-  {
-    id: "essential-hoodie",
-    title: "Essential Hoodie",
-    price: "$59.99",
-    originalPrice: "$89.99",
-    isFavorite: false,
-    image: "/images/hoodie.jpg",
-  },
-] as const;
+export default function YouMayAlsoLike({ currentProductId }: { currentProductId?: string }) {
+  const [products, setProducts] = useState<Product[]>([]);
 
-export default function YouMayAlsoLike() {
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && Array.isArray(res.data)) {
+          const filtered = res.data
+            .filter((p: Product) => p.id !== currentProductId && p.slug !== currentProductId)
+            .slice(0, 4);
+          setProducts(filtered);
+        }
+      })
+      .catch((err) => console.error("Error fetching related products:", err));
+  }, [currentProductId]);
+
+  if (products.length === 0) {
+    return null;
+  }
+
   return (
     <section>
       <div className="mb-8 flex items-end justify-between gap-4">
@@ -46,7 +34,7 @@ export default function YouMayAlsoLike() {
           You May Also Like
         </h2>
         <Link
-          href="/"
+          href="/products"
           className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-opacity hover:opacity-70"
         >
           View All
@@ -55,8 +43,8 @@ export default function YouMayAlsoLike() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {relatedProducts.map((product) => (
-          <ProductCard key={product.id} {...product} />
+        {products.map((product) => (
+          <ProductCard key={product.id} {...product} showColors={true} />
         ))}
       </div>
     </section>

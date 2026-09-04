@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { ChevronDown, ZoomIn } from "lucide-react";
 
@@ -13,6 +13,12 @@ type ProductGalleryProps = {
 
 export default function ProductGallery({ images }: ProductGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Reset to first view when color/images change
+  useEffect(() => {
+    setActiveIndex(0);
+  }, [images]);
+
   const activeImage = images[activeIndex] || images[0];
 
   if (!images || images.length === 0) return null;
@@ -29,10 +35,10 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
               aria-label={`View image ${index + 1}`}
               aria-pressed={activeIndex === index}
               className={cn(
-                "relative size-16 overflow-hidden rounded-lg bg-muted sm:size-20",
+                "relative size-16 overflow-hidden rounded-lg bg-muted sm:size-20 transition-all duration-200",
                 activeIndex === index
-                  ? "ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                  : "ring-1 ring-border"
+                  ? "ring-2 ring-foreground ring-offset-2 ring-offset-background scale-105"
+                  : "ring-1 ring-border hover:ring-foreground/50 opacity-80 hover:opacity-100"
               )}
             >
               <Image
@@ -53,11 +59,12 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
 
       <div className="relative min-h-[420px] flex-1 overflow-hidden rounded-lg bg-muted sm:min-h-[560px] lg:min-h-[640px]">
         <Image
+          key={activeImage}
           src={activeImage}
           alt="Active product view"
           fill
           priority
-          className="object-cover"
+          className="object-cover transition-opacity duration-300 ease-in-out animate-in fade-in-30"
           sizes="(max-width: 1024px) 100vw, 50vw"
         />
         <Button
@@ -65,7 +72,7 @@ export default function ProductGallery({ images }: ProductGalleryProps) {
           variant="secondary"
           size="icon"
           aria-label="Zoom image"
-          className="absolute right-4 bottom-4 rounded-full bg-background shadow-md"
+          className="absolute right-4 bottom-4 rounded-full bg-background/90 backdrop-blur-xs shadow-md hover:scale-105 transition-transform"
         >
           <ZoomIn className="size-4" />
         </Button>

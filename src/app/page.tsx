@@ -6,6 +6,7 @@ import Hero from "@/components/Hero";
 import PromoSplitBanner from "@/components/PromoSplitBanner";
 import VideoLookbook from "@/components/VideoLookbook";
 import WinterCollections from "@/components/WinterCollections";
+import RecentlyViewed from "@/components/RecentlyViewed";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
           <FeaturedCollections />
           <DemographicsGrid />
         </div>
+        <RecentlyViewed />
       </main>
       <Footer />
     </div>

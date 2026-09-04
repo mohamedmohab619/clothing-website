@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { deleteProductBySlug, getProductBySlug, updateProduct } from "@/services/products";
+import {
+  deleteProductBySlug,
+  getFormattedProductBySlug,
+  getProductBySlug,
+  updateProduct,
+} from "@/services/products";
 import { productInsertSchema } from "@/validation/products";
 import { BadRequestError, NotFoundError } from "@/lib/http/errors";
 import { withErrorHandling } from "@/lib/http/utils";
@@ -14,7 +19,10 @@ export const GET = withErrorHandling(async (
     throw new BadRequestError("Bad Request: product slug is required");
   }
 
-  const product = await getProductBySlug(slug);
+  const isRaw = req.nextUrl.searchParams.get("format") === "raw";
+  const product = isRaw
+    ? await getProductBySlug(slug)
+    : await getFormattedProductBySlug(slug);
 
   if (!product) {
     throw new NotFoundError("Product Not Found");

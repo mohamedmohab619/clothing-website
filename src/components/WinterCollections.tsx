@@ -1,8 +1,10 @@
 import ProductCard from "@/components/ProductCard";
+import { getFormattedProducts } from "@/services/products";
 
-import { products } from "@/data/products";
+export default async function WinterCollections() {
+  const allProducts = await getFormattedProducts();
+  const winterProducts = allProducts.slice(0, 4);
 
-export default function WinterCollections() {
   return (
     <section
       id="collections"
@@ -19,12 +21,9 @@ export default function WinterCollections() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products
-            .filter((product) => Number(product.id) < 5)
-            .map((product) => (
-              <ProductCard key={product.id} {...product} showColors={true} />
-            ))
-          }
+          {winterProducts.map((product) => (
+            <ProductCard key={product.id} {...product} showColors={true} />
+          ))}
         </div>
       </div>
     </section>
