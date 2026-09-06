@@ -10,9 +10,6 @@ export type DB = ReturnType<typeof drizzle<typeof schema>>;
 let db: DB | null = null;
 
 export function getDB() {
-  if (!serverConfig.db.url) {
-    return null;
-  }
   if (!db) {
     const sql = neon(serverConfig.db.url);
     db = drizzle(sql, {
