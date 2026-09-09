@@ -9,6 +9,7 @@ export function formatCents(cents: number): string {
 export function formatProductForUI(product: ProductWithRelations): UIProduct {
   const variants = product.variants || [];
   const images = product.images || [];
+  const collectionJunctions = product.collections || [];
 
   // Group by unique color names
   const colorMap = new Map<string, { value: string; images: string[]; sizes: Set<string> }>();
@@ -60,6 +61,18 @@ export function formatProductForUI(product: ProductWithRelations): UIProduct {
 
   const allSizes = Array.from(new Set(variants.map((v) => v.size).filter(Boolean)));
 
+  // [___ collection handling ___]
+  const collectionNames = [];
+  const collectionIds = [];
+
+  for (const j of collectionJunctions) {
+    if (j.collection) {
+      collectionNames.push(j.collection.name);
+    } else {
+      collectionIds.push(j.collectionId);
+    }
+  }
+
   return {
     id: String(product.id),
     slug: product.slug,
@@ -76,6 +89,7 @@ export function formatProductForUI(product: ProductWithRelations): UIProduct {
     availableSizes: allSizes.length > 0 ? allSizes : ["S", "M", "L", "XL", "2XL"],
     variants,
     images,
+    collections: (collectionNames.length > 0) ? collectionNames : collectionIds
   };
 }
 

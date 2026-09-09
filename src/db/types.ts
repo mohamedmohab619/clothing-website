@@ -7,7 +7,7 @@ export type NewProduct = InferInsertModel<typeof products>;
 export type ProductWithRelations = Product & {
   variants: Variant[];
   images: ProductImage[];
-  collections: ProductCollection[];
+  collections?: ProductCollectionWithRelations[];
 };
 
 export type Variant = InferSelectModel<typeof variants>;
@@ -21,3 +21,5 @@ export type NewCollection = InferInsertModel<typeof collections>;
 
 export type ProductCollection = InferSelectModel<typeof productCollections>;
 export type NewProductCollection = InferInsertModel<typeof productCollections>;
+
+export type ProductCollectionWithRelations = ProductCollection & { collection?: Collection; }

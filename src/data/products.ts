@@ -1,10 +1,10 @@
-export type ColorOption = {
+type ColorOption = {
   name: string;
   value: string;
   images: string[];
 };
 
-export type Product = {
+type Product = {
   id: string;
   slug?: string;
   title: string;

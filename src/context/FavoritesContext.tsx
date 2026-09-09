@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "sonner";
-import type { ColorOption } from "@/data/products";
+import type { UIColorOption } from "@/lib/products/types";
 
 export type FavoriteItem = {
   id: string;
@@ -12,7 +12,7 @@ export type FavoriteItem = {
   rawPrice?: number;
   originalPrice?: string;
   image: string;
-  colorOptions?: ColorOption[];
+  colorOptions?: UIColorOption[];
   selectedColor?: string;
   selectedSize?: string;
 };
@@ -21,7 +21,7 @@ type FavoritesContextType = {
   favorites: FavoriteItem[];
   favoritesCount: number;
   isFavorite: (idOrSlug: string, colorName?: string) => boolean;
-  toggleFavorite: (product: Partial<FavoriteItem> & { id: string; title: string; image: string }, selectedOption?: ColorOption) => void;
+  toggleFavorite: (product: Partial<FavoriteItem> & { id: string; title: string; image: string }, selectedOption?: UIColorOption) => void;
   removeFromFavorites: (idOrSlug: string, colorName?: string) => void;
   clearFavorites: () => void;
 };
@@ -66,7 +66,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
 
   const toggleFavorite = (
     product: Partial<FavoriteItem> & { id: string; title: string; image: string },
-    selectedOption?: ColorOption
+    selectedOption?: UIColorOption
   ) => {
     const activeColor = selectedOption?.name || product.selectedColor || product.colorOptions?.[0]?.name;
 

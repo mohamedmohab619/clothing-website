@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
-import type { Product } from "@/data/products";
+import type { UIProduct } from "@/lib/products/types";
 
 type RecentlyViewedContextType = {
-  recentlyViewed: Product[];
-  addRecentlyViewed: (product: Product) => void;
+  recentlyViewed: UIProduct[];
+  addRecentlyViewed: (product: UIProduct) => void;
   clearRecentlyViewed: () => void;
 };
 
@@ -15,7 +15,7 @@ const STORAGE_KEY = "aven_recently_viewed";
 const MAX_ITEMS = 8;
 
 export function RecentlyViewedProvider({ children }: { children: ReactNode }) {
-  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<UIProduct[]>([]);
   const [isMounted, setIsMounted] = useState(false);
 
   // Load from local storage on mount
@@ -34,7 +34,7 @@ export function RecentlyViewedProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const addRecentlyViewed = useCallback((product: Product) => {
+  const addRecentlyViewed = useCallback((product: UIProduct) => {
     if (!product || (!product.id && !product.slug)) return;
 
     setRecentlyViewed((prev) => {

@@ -17,10 +17,10 @@ const items = [
     className: "min-h-[180px] md:col-start-1 md:row-start-1 md:min-h-[220px]",
   },
   {
-    id: "hoodie",
-    title: "Hoodie",
+    id: "hoodies",
+    title: "Hoodies",
     src: "/images/hoodie.jpg",
-    href: "/products?category=hoodie",
+    href: "/products?category=hoodies",
     className:
       "col-span-2 row-span-2 min-h-[380px] md:col-span-2 md:col-start-2 md:row-span-2 md:row-start-1 md:min-h-0",
     showDiscover: true,
@@ -49,10 +49,10 @@ const items = [
       "col-span-2 min-h-[180px] md:col-span-2 md:col-start-2 md:row-start-3 md:min-h-[220px]",
   },
   {
-    id: "jacket",
-    title: "Jacket",
+    id: "jackets",
+    title: "Jackets",
     src: "/images/jacket.jpg",
-    href: "/products?category=jacket",
+    href: "/products?category=jackets",
     className:
       "row-span-2 min-h-[380px] md:col-start-4 md:row-span-2 md:row-start-2 md:min-h-0",
   },

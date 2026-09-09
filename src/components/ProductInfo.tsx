@@ -20,7 +20,7 @@ import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import { toast } from "sonner";
 
-import type { Product, ColorOption } from "@/data/products";
+import { UIProduct, UIColorOption } from "@/lib/products/types";
 
 const sizes = ["S", "M", "L", "XL", "XXL"] as const;
 
@@ -56,9 +56,9 @@ const bottomTrustItems = [
 ] as const;
 
 type ProductInfoProps = {
-  product: Product;
-  selectedColorOption: ColorOption | undefined;
-  onColorChange: (option: ColorOption) => void;
+  product: UIProduct;
+  selectedColorOption: UIColorOption | undefined;
+  onColorChange: (option: UIColorOption) => void;
 };
 
 export default function ProductInfo({ product, selectedColorOption, onColorChange }: ProductInfoProps) {
@@ -73,9 +73,18 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
 
   return (
     <div className="flex flex-col">
-      <Badge variant="secondary" className="rounded-lg">
-        New Arrival
-      </Badge>
+      <div className=" flex gap-2">
+        <Badge variant="secondary" className="rounded-lg">
+          New Arrival
+        </Badge>
+
+        {(product.collections && typeof product.collections[0] == "string")
+          ? product.collections.map(c => (
+            <Badge variant="secondary" className="rounded-lg">{c}</Badge>
+          ))
+          : null
+        }
+      </div>
 
       <h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
         {product.title}

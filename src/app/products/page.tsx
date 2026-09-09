@@ -21,14 +21,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useState, useEffect } from "react";
-import type { Product, ColorOption } from "@/data/products";
+import type { UIProduct, UIColorOption } from "@/lib/products/types";
 
 function ProductsContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [productsList, setProductsList] = useState<Product[]>([]);
+  const [productsList, setProductsList] = useState<UIProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -80,23 +80,23 @@ function ProductsContent() {
   const activeColors = searchParams.get("color")?.split(",") || [];
 
   type ProductCardItem = {
-    product: Product;
-    option?: ColorOption;
+    product: UIProduct;
+    option?: UIColorOption;
     key: string;
   };
 
   const productCards: ProductCardItem[] = productsList.flatMap((product): ProductCardItem[] =>
     product.colorOptions && product.colorOptions.length > 0
       ? product.colorOptions.map((option) => ({
-          product,
-          option,
-          key: `${product.slug || product.id}-${option.name}`,
-        }))
+        product,
+        option,
+        key: `${product.slug || product.id}-${option.name}`,
+      }))
       : [{
-          product,
-          option: undefined,
-          key: product.slug || product.id,
-        }]
+        product,
+        option: undefined,
+        key: product.slug || product.id,
+      }]
   );
 
   return (

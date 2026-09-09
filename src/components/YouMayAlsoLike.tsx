@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import type { Product } from "@/data/products";
+import type { UIProduct } from "@/lib/products/types";
 
 export default function YouMayAlsoLike({ currentProductId }: { currentProductId?: string }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<UIProduct[]>([]);
 
   useEffect(() => {
     fetch("/api/products")
@@ -15,7 +15,7 @@ export default function YouMayAlsoLike({ currentProductId }: { currentProductId?
       .then((res) => {
         if (res.success && Array.isArray(res.data)) {
           const filtered = res.data
-            .filter((p: Product) => p.id !== currentProductId && p.slug !== currentProductId)
+            .filter((p: UIProduct) => p.id !== currentProductId && p.slug !== currentProductId)
             .slice(0, 4);
           setProducts(filtered);
         }

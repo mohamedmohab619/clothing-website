@@ -12,7 +12,7 @@ import YouMayAlsoLike from "@/components/YouMayAlsoLike";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import { Button } from "@/components/ui/button";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
-import type { Product, ColorOption } from "@/data/products";
+import { UIColorOption, UIProduct } from "@/lib/products/types";
 
 export default function ProductPage() {
   const params = useParams();
@@ -22,8 +22,8 @@ export default function ProductPage() {
   const pathname = usePathname();
   const { addRecentlyViewed } = useRecentlyViewed();
 
-  const [product, setProduct] = useState<Product | null>(null);
-  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(undefined);
+  const [product, setProduct] = useState<UIProduct | null>(null);
+  const [selectedColorOption, setSelectedColorOption] = useState<UIColorOption | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
   // Track product in recently viewed when loaded
@@ -42,7 +42,7 @@ export default function ProductPage() {
       .then((res) => res.json())
       .then((res) => {
         if (isMounted && res.success && res.data) {
-          const fetchedProduct: Product = res.data;
+          const fetchedProduct: UIProduct = res.data;
           setProduct(fetchedProduct);
 
           const requestedCoption = searchParams.get("coption")?.toLowerCase();
@@ -86,7 +86,7 @@ export default function ProductPage() {
     return () => window.removeEventListener("popstate", handlePopState);
   }, [product]);
 
-  function handleColorChange(color: ColorOption) {
+  function handleColorChange(color: UIColorOption) {
     setSelectedColorOption(color);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);

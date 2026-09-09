@@ -23,6 +23,7 @@ export type UIProduct = {
   availableSizes: string[];
   variants: Variant[];
   images: ProductImage[];
+  collections?: string[] | number[];
 };
 
 export type ProductSearchFilters = {

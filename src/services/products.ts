@@ -38,11 +38,15 @@ export async function getProductBySlug(slug: string): Promise<ProductWithRelatio
     with: {
       variants: true,
       images: true,
+      collections: {
+        with: {
+          collection: true,
+        }
+      },
     },
   });
 
   return result as ProductWithRelations;
-
 }
 
 export async function getFormattedProductBySlug(slug: string): Promise<UIProduct | null> {

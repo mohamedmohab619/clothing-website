@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Search, X, Star, ArrowRight, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/data/products";
+import type { UIProduct } from "@/lib/products/types";
 
 type SearchOverlayProps = {
   isOpen: boolean;
@@ -85,7 +85,7 @@ function getFitSubtitle(title: string): string {
   return "Regular Fit";
 }
 
-function getDiscountBadge(product: Product): { text: string; isSoldOut?: boolean } | null {
+function getDiscountBadge(product: UIProduct): { text: string; isSoldOut?: boolean } | null {
   const numPrice = parseFloat(product.price.replace(/[^0-9.-]+/g, ""));
   const numOriginal = parseFloat(product.originalPrice.replace(/[^0-9.-]+/g, ""));
 
@@ -105,7 +105,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
   const [inputValue, setInputValue] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<UIProduct[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRendered, setIsRendered] = useState(false);
   const [isAnimated, setIsAnimated] = useState(false);
@@ -215,10 +215,10 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const activeSearchText = debouncedQuery.trim() || inputValue.trim();
   const matchedCollections = activeSearchText
     ? ALL_COLLECTIONS.filter(
-        (c) =>
-          c.name.toLowerCase().includes(activeSearchText.toLowerCase()) ||
-          c.keywords.some((k) => k.includes(activeSearchText.toLowerCase()))
-      )
+      (c) =>
+        c.name.toLowerCase().includes(activeSearchText.toLowerCase()) ||
+        c.keywords.some((k) => k.includes(activeSearchText.toLowerCase()))
+    )
     : ALL_COLLECTIONS.slice(0, 3);
 
   const displayedCollections =
@@ -227,19 +227,19 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   // Filtered popular searches - always provide relevant or popular suggestions
   const matchedSearches = activeSearchText
     ? POPULAR_SEARCH_TERMS.filter(
-        (term) =>
-          term.toLowerCase().includes(activeSearchText.toLowerCase()) &&
-          term.toLowerCase() !== activeSearchText.toLowerCase()
-      )
+      (term) =>
+        term.toLowerCase().includes(activeSearchText.toLowerCase()) &&
+        term.toLowerCase() !== activeSearchText.toLowerCase()
+    )
     : [];
 
   const displayedSearches = activeSearchText
     ? [
-        activeSearchText,
-        ...(matchedSearches.length > 0
-          ? matchedSearches
-          : POPULAR_SEARCH_TERMS.slice(0, 3)),
-      ]
+      activeSearchText,
+      ...(matchedSearches.length > 0
+        ? matchedSearches
+        : POPULAR_SEARCH_TERMS.slice(0, 3)),
+    ]
     : POPULAR_SEARCH_TERMS.slice(0, 4);
 
   const handleSelectSearchTerm = (term: string) => {

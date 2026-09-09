@@ -8,19 +8,19 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/context/FavoritesContext";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
-import type { ColorOption } from "@/data/products";
+import type { UIColorOption } from "@/lib/products/types";
 
 type ProductCardProps = {
   id: string;
-  slug?: string;
+  slug: string;
   title: string;
   price: string;
   originalPrice: string;
   isFavorite?: boolean;
   image: string;
   colors?: string[];
-  colorOptions?: ColorOption[];
-  selectedCOption?: ColorOption;
+  colorOptions: UIColorOption[];
+  selectedCOption?: UIColorOption;
   showColors?: boolean;
 };
 
@@ -38,7 +38,7 @@ export default function ProductCard({
   showColors,
 }: ProductCardProps) {
   const [selectedColor, setSelectedColor] = useState(colors?.[0]);
-  const [selectedColorOption, setSelectedColorOption] = useState<ColorOption | undefined>(selectedCOption || colorOptions?.[0]);
+  const [selectedColorOption, setSelectedColorOption] = useState<UIColorOption | undefined>(selectedCOption || colorOptions?.[0]);
   const { isFavorite: checkIsFavorite, toggleFavorite } = useFavorites();
   const { addRecentlyViewed } = useRecentlyViewed();
 
@@ -52,11 +52,18 @@ export default function ProductCard({
       id,
       slug,
       title,
+      name: "",
+      description: "",
       price,
       originalPrice,
+      rawPrice: 0,
+      rawComparePrice: 0,
       image: displayImage,
       colorOptions,
       isFavorite: isItemFavorited,
+      availableSizes: [],
+      variants: [],
+      images: [],
     });
   };
 

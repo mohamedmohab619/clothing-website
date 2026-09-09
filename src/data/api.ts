@@ -206,6 +206,22 @@ export const collectionsData: NewCollection[] = [
     imageUrl: "/images/jeans.jpg"
   },
   {
+    name: "T-shirts",
+    imageUrl: "/images/tshirts.jpg"
+  },
+  {
+    name: "Sneakers",
+    imageUrl: "/images/seankers.jpg"
+  },
+  {
+    name: "Bags",
+    imageUrl: "/images/bags.jpg"
+  },
+  {
+    name: "Jackets",
+    imageUrl: "/images/jacket.jpg"
+  },
+  {
     name: "Men",
     imageUrl: "/images/men.jpg"
   },
@@ -225,7 +241,7 @@ export const collectionsData: NewCollection[] = [
 export const productCollectionsData: NewProductCollection[] = [
   {
     productId: 1, // hooddie
-    collectionId: 5, // men
+    collectionId: 9, // men
   },
   {
     productId: 1, // hooddie
@@ -233,7 +249,7 @@ export const productCollectionsData: NewProductCollection[] = [
   },
   {
     productId: 2, // women shirt
-    collectionId: 6, // women
+    collectionId: 10, // women
   },
   {
     productId: 3, // men jeans
@@ -241,7 +257,7 @@ export const productCollectionsData: NewProductCollection[] = [
   },
   {
     productId: 3, // men jeans
-    collectionId: 5, // men
+    collectionId: 9, // men
   },
   {
     productId: 4, // women jeans
@@ -249,10 +265,10 @@ export const productCollectionsData: NewProductCollection[] = [
   },
   {
     productId: 4, // women jeans
-    collectionId: 6, // women
+    collectionId: 10, // women
   },
   {
     productId: 5, // baby blue shirt
-    collectionId: 6, // women
+    collectionId: 10, // women
   },
 ];
