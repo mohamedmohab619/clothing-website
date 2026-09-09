@@ -5,22 +5,15 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1787940778259,
-      "tag": "20260828181258_common_rhodey",
+      "when": 1788800948573,
+      "tag": "20260907170908_smart_landau",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1788104986851,
-      "tag": "20260830154946_uneven_harrier",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1788120379597,
-      "tag": "20260830200619_tricky_firedrake",
+      "when": 1788805464409,
+      "tag": "20260907182424_salty_black_panther",
       "breakpoints": true
     }
   ]

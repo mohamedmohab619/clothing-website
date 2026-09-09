@@ -1,23 +1,23 @@
-import { seed } from "@/db";
+import { reset } from "@/db";
 import { NextResponse } from "next/server";
 import { serverConfig } from "@/lib/config/server";
 
 export async function POST() {
   if (!serverConfig.isDevelopment) {
     return NextResponse.json(
-      { error: "seed is disabled in production" },
+      { error: "reset is disabled in production" },
       { status: 403 }
     );
   }
 
   try {
-    const result = await seed();
+    const result = await reset();
 
     return NextResponse.json({ result });
   } catch (error) {
     console.error("seeding error", error);
     return NextResponse.json(
-      { error: "Failed to seed database", details: String(error) },
+      { error: "Failed to reset database", details: String(error) },
       { status: 500 }
     );
   }

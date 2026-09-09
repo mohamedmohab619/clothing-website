@@ -28,6 +28,7 @@ export type UIProduct = {
 export type ProductSearchFilters = {
   q?: string;
   category?: string;
+  collection?: string;
   color?: string;
   size?: string;
   minPrice?: string;

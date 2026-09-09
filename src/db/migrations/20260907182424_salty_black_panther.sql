@@ -1,0 +1,1 @@
+ALTER TABLE "collections" RENAME COLUMN "imageUrl" TO "image_url";

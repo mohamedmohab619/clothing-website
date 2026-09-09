@@ -4,7 +4,7 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { sql } from "drizzle-orm";
 import * as schema from "./schema"
-import { productsData, variantsData, productImagesData } from "@/data/api";
+import { productsData, variantsData, productImagesData, collectionsData, productCollectionsData } from "@/data/api";
 
 export type DB = ReturnType<typeof drizzle<typeof schema>>;
 let db: DB | null = null;
@@ -33,7 +33,7 @@ export async function TestQuery() {
  * Reset Database
  * Clears data and resets identity sequences back to 1
  */
-async function reset() {
+export async function reset() {
   const db = getDB();
   if (!db) {
     throw new Error("Database is not configured.");
@@ -41,7 +41,7 @@ async function reset() {
 
   // Await truncate execution with RESTART IDENTITY
   await db.execute(
-    sql.raw(`TRUNCATE TABLE "products", "variants", "product_images" RESTART IDENTITY CASCADE;`)
+    sql.raw(`TRUNCATE TABLE "products", "variants", "product_images", "product_collections", "collections" RESTART IDENTITY CASCADE;`)
   );
 }
 
@@ -63,6 +63,27 @@ export async function seed() {
   // 3. Insert Product Images
   await db.insert(schema.productImages).values(productImagesData);
 
+  // 4. collections
+  await db.insert(schema.collections).values(collectionsData);
+
+  // 5. product collections
+  await db.insert(schema.productCollections).values(productCollectionsData);
+
   return { sucess: true, message: "Database seeded successfully" };
 }
 
+export async function deleteTables() {
+  const db = getDB();
+  if (!db) {
+    throw new Error("Database is not configured.");
+  }
+
+  await db.execute(sql.raw(`DROP TABLE product_collections`));
+  await db.execute(sql.raw(`DROP TABLE product_images`));
+  await db.execute(sql.raw(`DROP TABLE variants`));
+  await db.execute(sql.raw(`DROP TABLE collections`));
+  await db.execute(sql.raw(`DROP TABLE products`));
+  await db.execute(sql.raw(`DROP TABLE __drizzle_migrations__`));
+
+  return { sucess: true, message: "Database deletion successfully" };
+}

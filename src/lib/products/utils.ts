@@ -118,6 +118,7 @@ export function parseProductSearchParams(searchParams: URLSearchParams): Product
   return {
     q: searchParams.get("q") || searchParams.get("query") || undefined,
     category: searchParams.get("category") || undefined,
+    collection: searchParams.get("collection") || undefined,
     color: searchParams.get("color") || undefined,
     size: searchParams.get("size") || undefined,
     minPrice: searchParams.get("minPrice") || undefined,

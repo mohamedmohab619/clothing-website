@@ -1,4 +1,4 @@
-import { NewProduct, NewProductImage, NewVariant } from "@/db/types";
+import { NewCollection, NewProduct, NewProductCollection, NewProductImage, NewVariant } from "@/db/types";
 
 // ============================================================================
 // 1. PRODUCTS DATA
@@ -10,18 +10,18 @@ export const productsData: NewProduct[] = [
     status: "active",
   },
   {
-    name: "Patterned Scarf",
-    slug: "patterned-scarf",
+    name: "Patterned Shirt",
+    slug: "patterned-shirt",
     status: "active",
   },
   {
-    name: "Relaxed Fit Cor Jacket",
-    slug: "relaxed-fit-cor-jacket",
+    name: "Relaxed Fit Jeans Pants",
+    slug: "relaxed-fit-jeans-pants",
     status: "active",
   },
   {
-    name: "Rib-Knit Hat",
-    slug: "rib-knit-hat",
+    name: "Women Jeans",
+    slug: "women-jeans",
     status: "active",
   },
   {
@@ -181,4 +181,78 @@ export const productImagesData: NewProductImage[] = [
   { productId: 5, colorName: "Baby Blue", imageUrl: "/images/women-blue-shirt2.jpg", isPrimary: false, sortOrder: 1 },
   { productId: 5, colorName: "Baby Blue", imageUrl: "/images/women-blue-shirt3.jpg", isPrimary: false, sortOrder: 2 },
   { productId: 5, colorName: "Baby Blue", imageUrl: "/images/women-blue-shirt4.jpg", isPrimary: false, sortOrder: 3 },
+];
+
+// ============================================================================
+// 4. COLLECTIONS DATA
+// ============================================================================
+export const collectionsData: NewCollection[] = [
+  {
+    name: "Summer",
+    description: "Enjoy Summer",
+    imageUrl: "/images/summer.jpg"
+  },
+  {
+    name: "Winter",
+    description: "Enjoy Winter",
+    imageUrl: "/images/winter.jpg"
+  },
+  {
+    name: "Hoodies",
+    imageUrl: "/images/hoodie.jpg"
+  },
+  {
+    name: "Jeans",
+    imageUrl: "/images/jeans.jpg"
+  },
+  {
+    name: "Men",
+    imageUrl: "/images/men.jpg"
+  },
+  {
+    name: "Women",
+    imageUrl: "/images/women.jpg"
+  },
+  {
+    name: "Kids",
+    imageUrl: "/images/kids.jpg"
+  },
+];
+
+// ============================================================================
+// 5. PRODUCT COLLECTIONS DATA
+// ============================================================================
+export const productCollectionsData: NewProductCollection[] = [
+  {
+    productId: 1, // hooddie
+    collectionId: 5, // men
+  },
+  {
+    productId: 1, // hooddie
+    collectionId: 2, // winter
+  },
+  {
+    productId: 2, // women shirt
+    collectionId: 6, // women
+  },
+  {
+    productId: 3, // men jeans
+    collectionId: 4, // Jeans
+  },
+  {
+    productId: 3, // men jeans
+    collectionId: 5, // men
+  },
+  {
+    productId: 4, // women jeans
+    collectionId: 4, // Jeans
+  },
+  {
+    productId: 4, // women jeans
+    collectionId: 6, // women
+  },
+  {
+    productId: 5, // baby blue shirt
+    collectionId: 6, // women
+  },
 ];

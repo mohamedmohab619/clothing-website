@@ -1,8 +1,26 @@
 CREATE TYPE "public"."product_status" AS ENUM('draft', 'active', 'archived');--> statement-breakpoint
+CREATE TABLE "collections" (
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "collections_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
+	"name" varchar(255) NOT NULL,
+	"description" text,
+	"imageUrl" varchar(500),
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "collections_name_unique" UNIQUE("name")
+);
+--> statement-breakpoint
+CREATE TABLE "product_collections" (
+	"product_id" integer NOT NULL,
+	"collection_id" integer NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "product_collections_product_id_collection_id_pk" PRIMARY KEY("product_id","collection_id")
+);
+--> statement-breakpoint
 CREATE TABLE "product_images" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "product_images_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"product_id" integer NOT NULL,
-	"variant_id" integer,
+	"color_name" varchar(50) NOT NULL,
 	"image_url" varchar(508) NOT NULL,
 	"is_primary" boolean DEFAULT false NOT NULL,
 	"sort_order" integer DEFAULT 0 NOT NULL,
@@ -28,7 +46,8 @@ CREATE TABLE "variants" (
 	"price" integer NOT NULL,
 	"compare_price" integer,
 	"stock_quantity" integer DEFAULT 0 NOT NULL,
-	"color" varchar(50) NOT NULL,
+	"color_name" varchar(50) NOT NULL,
+	"color_value" varchar(50) NOT NULL,
 	"size" varchar(20) NOT NULL,
 	"weight_grams" integer,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -37,5 +56,4 @@ CREATE TABLE "variants" (
 );
 --> statement-breakpoint
 ALTER TABLE "product_images" ADD CONSTRAINT "product_images_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "product_images" ADD CONSTRAINT "product_images_variant_id_variants_id_fk" FOREIGN KEY ("variant_id") REFERENCES "public"."variants"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "variants" ADD CONSTRAINT "variants_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;

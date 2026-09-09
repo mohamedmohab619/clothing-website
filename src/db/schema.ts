@@ -6,6 +6,7 @@ import {
   boolean,
   pgEnum,
   timestamp,
+  primaryKey,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -15,6 +16,7 @@ const timestamps = {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }
 
+// [______ Product _______]
 // Enum for product status
 export const productStatusEnum = pgEnum('product_status', ['draft', 'active', 'archived'])
 
@@ -58,6 +60,7 @@ export const productImages = pgTable('product_images', {
 export const productsRelations = relations(products, ({ many }) => ({
   variants: many(variants),
   images: many(productImages),
+  collections: many(productCollections),
 }));
 
 export const variantsRelations = relations(variants, ({ one, many }) => ({
@@ -72,5 +75,37 @@ export const productImagesRelations = relations(productImages, ({ one }) => ({
   product: one(products, {
     fields: [productImages.productId],
     references: [products.id],
+  }),
+}));
+
+// [______ About Product ______]
+export const collections = pgTable('collections', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar({ length: 255 }).notNull().unique(),
+  description: text(),
+  imageUrl: varchar("image_url", { length: 500 }),
+  ...timestamps
+});
+
+export const productCollections = pgTable('product_collections', {
+  productId: integer('product_id').notNull(),
+  collectionId: integer('collection_id').notNull(),
+  ...timestamps
+}, (table) => [
+  primaryKey({ columns: [table.productId, table.collectionId] })
+]);
+
+export const collectionRelations = relations(collections, ({ many }) => ({
+  productCollections: many(productCollections),
+}));
+
+export const productCollectionsRelations = relations(productCollections, ({ one }) => ({
+  product: one(products, {
+    fields: [productCollections.productId],
+    references: [products.id]
+  }),
+  collection: one(collections, {
+    fields: [productCollections.collectionId],
+    references: [collections.id]
   }),
 }));

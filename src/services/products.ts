@@ -1,5 +1,5 @@
 import { getDB } from "@/db";
-import { products, variants } from "@/db/schema";
+import { collections, productCollections, products, variants } from "@/db/schema";
 import { NewProduct, ProductWithRelations } from "@/db/types";
 import { UIProduct, ProductSearchFilters } from "@/lib/products/types";
 import { eq, or, and, ilike, exists, sql, SQL } from "drizzle-orm";
@@ -83,7 +83,7 @@ export async function deleteProductBySlug(slug: string) {
 function buildSearchConditions(db: ReturnType<typeof getDB>, filters: ProductSearchFilters): SQL[] {
   const conditions: SQL[] = [eq(products.status, "active")];
 
-  const { q, category, color, size, minPrice, maxPrice } = filters;
+  const { q, category, collection, color, size, minPrice, maxPrice } = filters;
 
   if (q) {
     const term = `%${q.trim()}%`;
@@ -103,8 +103,39 @@ function buildSearchConditions(db: ReturnType<typeof getDB>, filters: ProductSea
   }
 
   if (category) {
-    const term = `%${category.trim()}%`;
-    conditions.push(or(ilike(products.slug, term), ilike(products.name, term))!);
+    const term = category.trim();
+    conditions.push(
+      exists(
+        db
+          .select({ one: sql`1` })
+          .from(productCollections)
+          .innerJoin(collections, eq(productCollections.collectionId, collections.id))
+          .where(
+            and(
+              eq(productCollections.productId, products.id),
+              sql`lower(${collections.name}) = lower(${term})`
+            )
+          )
+      )!
+    );
+  }
+
+  if (collection) {
+    const term = collection.trim();
+    conditions.push(
+      exists(
+        db
+          .select({ one: sql`1` })
+          .from(productCollections)
+          .innerJoin(collections, eq(productCollections.collectionId, collections.id))
+          .where(
+            and(
+              eq(productCollections.productId, products.id),
+              sql`lower(${collections.name}) = lower(${term})`
+            )
+          )
+      )!
+    );
   }
 
   if (color) {
