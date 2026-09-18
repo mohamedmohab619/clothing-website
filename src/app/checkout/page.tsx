@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { NewOrder } from "@/db/types";
 
 type Step = "shipping" | "payment" | "review" | "success";
 
@@ -223,18 +224,66 @@ export default function CheckoutPage() {
     }
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
+    const generatedOrder = `AVEN-${Math.floor(100000 + Math.random() * 900000)}`;
+
     setIsSubmitting(true);
-    // Simulate secure order authorization
-    setTimeout(() => {
-      const generatedOrder = `AVEN-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    // TODO: move to an external function
+    const newOrder: NewOrder = {
+      orderNumber: generatedOrder,
+      customerName: fullName,
+      customerEmail: email,
+      subtotal: Math.round(cartTotal * 100),
+      shippingFee: 0,
+      tax: 0,
+      total: Math.round(finalTotal * 100),
+      paymentMethod: "cash_on_delivery",
+      shippingAddress: {
+        address1,
+        address2,
+        city,
+        stateProv,
+        zip,
+        country,
+        shippingMethod
+      }
+    }
+
+    // prductId for fetching current price
+    // color, size, quantity from cart
+    // name, sku, price from DB
+    const newItems: Object[] = [];
+
+    cartItems.forEach(i => {
+      newItems.push({
+        productId: Number(i.id),
+        color: i.selectedColor,
+        size: i.selectedSize,
+        quantity: i.quantity,
+      })
+    })
+
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      body: JSON.stringify({
+        order: newOrder,
+        items: newItems
+      })
+    });
+
+    setIsSubmitting(false);
+
+    if (response.ok) {
       setOrderNumber(generatedOrder);
-      setIsSubmitting(false);
+      setOrderNumber(generatedOrder);
       setCurrentStep("success");
       clearCart();
       window.scrollTo({ top: 0, behavior: "smooth" });
       toast.success(`Order placed successfully! Order #${generatedOrder}`);
-    }, 1200);
+    } else {
+      toast.error(`Error placing order`);
+    }
   };
 
   // Step 4: Success View
@@ -296,10 +345,10 @@ export default function CheckoutPage() {
                     {paymentMethod === "card"
                       ? `Card ending in ${cardNumber.slice(-4) || "4242"}`
                       : paymentMethod === "paypal"
-                      ? "PayPal Express"
-                      : paymentMethod === "apple_pay"
-                      ? "Apple Pay"
-                      : "Cash on Delivery"}
+                        ? "PayPal Express"
+                        : paymentMethod === "apple_pay"
+                          ? "Apple Pay"
+                          : "Cash on Delivery"}
                   </p>
                   <p className="font-semibold text-foreground mt-2">
                     Total Paid: ${finalTotal.toFixed(2)}
@@ -371,8 +420,8 @@ export default function CheckoutPage() {
                       currentStep === "shipping"
                         ? "bg-primary text-primary-foreground"
                         : currentStep === "payment" || currentStep === "review"
-                        ? "bg-primary/20 text-primary"
-                        : "border border-border text-muted-foreground"
+                          ? "bg-primary/20 text-primary"
+                          : "border border-border text-muted-foreground"
                     )}
                   >
                     {currentStep === "payment" || currentStep === "review" ? (
@@ -399,8 +448,8 @@ export default function CheckoutPage() {
                     currentStep === "payment"
                       ? "text-primary font-semibold"
                       : currentStep === "review"
-                      ? "text-foreground hover:text-primary cursor-pointer"
-                      : "text-muted-foreground cursor-default"
+                        ? "text-foreground hover:text-primary cursor-pointer"
+                        : "text-muted-foreground cursor-default"
                   )}
                 >
                   <span
@@ -409,8 +458,8 @@ export default function CheckoutPage() {
                       currentStep === "payment"
                         ? "bg-primary text-primary-foreground"
                         : currentStep === "review"
-                        ? "bg-primary/20 text-primary"
-                        : "border border-border text-muted-foreground"
+                          ? "bg-primary/20 text-primary"
+                          : "border border-border text-muted-foreground"
                     )}
                   >
                     {currentStep === "review" ? (
@@ -1106,10 +1155,10 @@ export default function CheckoutPage() {
                         {paymentMethod === "card"
                           ? `Credit Card (ending in ${cardNumber.slice(-4) || "4242"})`
                           : paymentMethod === "paypal"
-                          ? "PayPal Express Checkout"
-                          : paymentMethod === "apple_pay"
-                          ? "Apple Pay / Digital Wallet"
-                          : "Cash on Delivery"}
+                            ? "PayPal Express Checkout"
+                            : paymentMethod === "apple_pay"
+                              ? "Apple Pay / Digital Wallet"
+                              : "Cash on Delivery"}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         Billing address:{" "}

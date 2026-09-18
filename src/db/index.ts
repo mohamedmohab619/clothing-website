@@ -1,18 +1,21 @@
 // db/index.ts
 import { serverConfig } from "@/lib/config/server";
-import { drizzle } from "drizzle-orm/neon-http";
-import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import { neon, Pool, neonConfig } from "@neondatabase/serverless";
 import { sql } from "drizzle-orm";
 import * as schema from "./schema"
 import { productsData, variantsData, productImagesData, collectionsData, productCollectionsData } from "@/data/api";
+import ws from 'ws';
+
+neonConfig.webSocketConstructor = ws;
 
 export type DB = ReturnType<typeof drizzle<typeof schema>>;
 let db: DB | null = null;
 
 export function getDB() {
   if (!db) {
-    const sql = neon(serverConfig.db.url);
-    db = drizzle(sql, {
+    const pool = new Pool({ connectionString: serverConfig.db.url });
+    db = drizzle(pool, {
       schema: schema,
       casing: "snake_case"
     });
