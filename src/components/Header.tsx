@@ -11,6 +11,7 @@ import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import CartSidebar from "@/components/CartSidebar";
 import SearchOverlay from "@/components/SearchOverlay";
+import { UserAvatar } from "./UserAvatar";
 
 const navLinks = [
   { href: "/products?category=men", label: "Men" },
@@ -161,16 +162,20 @@ export default function Header() {
               </SheetTrigger>
               <CartSidebar />
             </Sheet>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label="Account"
-              className="hidden sm:inline-flex"
-              render={<Link href="/profile" />}
-            >
-              <User className="size-5" strokeWidth={1.5} />
-            </Button>
+
+            {/* <Button */}
+            {/*   type="button" */}
+            {/*   variant="ghost" */}
+            {/*   size="icon" */}
+            {/*   aria-label="Account" */}
+            {/*   className="hidden sm:inline-flex" */}
+            {/*   render={<Link href="/profile" />} */}
+            {/* > */}
+            {/*   <User className="size-5" strokeWidth={1.5} /> */}
+            {/* </Button> */}
+
+            <UserAvatar />
+
             <Button
               type="button"
               variant="ghost"

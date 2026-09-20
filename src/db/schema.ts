@@ -10,6 +10,7 @@ import {
   jsonb,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
+export * from "./auth-schema"
 
 // define timestamps and import them in every table
 const timestamps = {

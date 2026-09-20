@@ -6,6 +6,7 @@ import { CartProvider } from "@/context/CartContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { RecentlyViewedProvider } from "@/context/RecentlyViewedContext";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -46,14 +47,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <CartProvider>
-          <FavoritesProvider>
-            <RecentlyViewedProvider>
-              {children}
-              <Toaster />
-            </RecentlyViewedProvider>
-          </FavoritesProvider>
-        </CartProvider>
+        <TooltipProvider>
+          <CartProvider>
+            <FavoritesProvider>
+              <RecentlyViewedProvider>
+                {children}
+                <Toaster />
+              </RecentlyViewedProvider>
+            </FavoritesProvider>
+          </CartProvider>
+        </TooltipProvider>
       </body>
     </html>
   );
