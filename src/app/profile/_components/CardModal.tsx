@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { handleAddCard } from "../utils";
+import { handleAddCard } from "../utils.new";
 import { Dispatch, SetStateAction, useState } from "react";
 
 interface CardModalProps {

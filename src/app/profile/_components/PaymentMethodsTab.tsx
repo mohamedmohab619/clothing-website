@@ -7,7 +7,7 @@ import { SavedCard } from "../types";
 import { Dispatch, SetStateAction } from "react";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { handleDeleteCard } from "../utils";
+import { handleDeleteCard } from "../utils.new";
 
 interface PaymentMethodsTabProps {
   cards: SavedCard[],

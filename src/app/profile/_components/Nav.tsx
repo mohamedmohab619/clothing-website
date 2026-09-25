@@ -6,20 +6,20 @@ import { cn } from "@/lib/utils";
 import { useFavorites } from "@/context/FavoritesContext";
 
 interface NavProps {
-  orders: Order[],
+  orderCount: number,
   addresses: Address[],
   cards: SavedCard[],
   activeTab: TabKey,
   setActiveTab: Dispatch<SetStateAction<TabKey>>
 }
 
-export function Nav({ orders, addresses, cards, activeTab, setActiveTab }: NavProps) {
+export function Nav({ orderCount, addresses, cards, activeTab, setActiveTab }: NavProps) {
   const { favoritesCount } = useFavorites();
 
   return (
     <div className="md:col-span-4 lg:col-span-3 rounded-xl border border-border bg-card p-2 shadow-xs space-y-1">
       {[
-        { id: "orders", label: "My Orders", icon: Package, badge: orders.length },
+        { id: "orders", label: "My Orders", icon: Package, badge: orderCount },
         { id: "personal", label: "Personal Information", icon: User },
         { id: "addresses", label: "Saved Addresses", icon: MapPin, badge: addresses.length },
         { id: "payments", label: "Payment Methods", icon: CreditCard, badge: cards.length },
@@ -34,7 +34,7 @@ export function Nav({ orders, addresses, cards, activeTab, setActiveTab }: NavPr
             type="button"
             onClick={() => setActiveTab(item.id as TabKey)}
             className={cn(
-              "w-full flex items-center justify-between px-3.5 py-3 rounded-lg text-sm font-medium transition-all duration-150 text-left",
+              "w-full flex items-center justify-between px-3.5 py-3 rounded-lg text-sm font-medium transition-all duration-150 text-left cursor-pointer",
               isActive
                 ? "bg-primary text-primary-foreground shadow-xs font-semibold"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/60"

@@ -13,7 +13,8 @@ import { Controller } from "react-hook-form"
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 
 const signupSchema = z.object({
-  name: z.string().min(1),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
   email: z.email().min(1),
   password: z.string().min(1)
 });
@@ -25,7 +26,8 @@ export function SignUpTab() {
   const form = useForm<signupForm>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
     }
@@ -33,8 +35,14 @@ export function SignUpTab() {
 
   const { isSubmitting } = form.formState
 
-  async function handleSignup(data: signupForm) {
-    await authClient.signUp.email({ ...data }, {
+  async function handleSignup({ firstName, lastName, email, password }: signupForm) {
+    await authClient.signUp.email({
+      name: `${firstName} ${lastName}`,
+      firstName,
+      lastName,
+      email,
+      password,
+    }, {
       onError: (error) => {
         toast.error(error.error.message || "Failed to sign up");
       },
@@ -52,15 +60,35 @@ export function SignUpTab() {
       <FieldGroup>
         <Controller
           control={form.control}
-          name="name"
+          name="firstName"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="signup-name">Name</FieldLabel>
+              <FieldLabel htmlFor="firstName">First Name</FieldLabel>
               <Input
                 {...field}
-                id="signup-name"
+                id="firstName"
                 type="text"
-                autoComplete="name"
+                autoComplete="firstName"
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && (
+                <FieldError errors={[fieldState.error]} />
+              )}
+            </Field>
+          )}
+        />
+
+        <Controller
+          control={form.control}
+          name="lastName"
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+              <Input
+                {...field}
+                id="lastName"
+                type="text"
+                autoComplete="lastName"
                 aria-invalid={fieldState.invalid}
               />
               {fieldState.invalid && (

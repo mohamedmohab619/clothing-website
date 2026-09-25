@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { authClient } from "@/lib/auth/auth-client";
@@ -18,6 +18,7 @@ import { SettingsTab } from "./_components/SettingsTab";
 import { AddressModal } from "./_components/AddressModal";
 import { CardModal } from "./_components/CardModal";
 import { OrderTrackingDialog } from "./_components/OrderTrackingDialog";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -29,17 +30,27 @@ export default function ProfilePage() {
   const [cards, setCards] = useState<SavedCard[]>(INITIAL_CARDS);
   const [orders] = useState<Order[]>(INITIAL_ORDERS);
 
-  // Address Modal State
+  // Modals
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-
-  // Card Modal State
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
-
-  // Tracking Modal State
   const [trackingOrder, setTrackingOrder] = useState<Order | null>(null);
 
   // session checking
   const { data: sessionData, isPending } = authClient.useSession();
+
+  // Orders Data
+  const [ordersData, setOrdersData] = useState([]);
+
+  useEffect(() => {
+    fetch(`/api/me/orders`)
+      .then(res => res.json())
+      .then(res => {
+        setOrdersData(res);
+      }).catch((error) => {
+        toast.error("Error to fetch orders");
+        console.error("Failed to fetch orders", error);
+      })
+  }, []);
 
   if (isPending) return <ProfileLoading />
 
@@ -61,12 +72,12 @@ export default function ProfilePage() {
           </nav>
 
           {/* Profile Hero Card */}
-          <HeroCard user={sessionData.user} orders={orders} addresses={addresses} setActiveTab={setActiveTab} />
+          <HeroCard user={sessionData.user} orderCount={ordersData.length} ordersInTransit={0} addresses={addresses} setActiveTab={setActiveTab} />
 
           {/* Main Content Layout: Sidebar Tabs + Active Content */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-5">
             {/* Left Nav Menu */}
-            <Nav orders={orders} cards={cards} addresses={addresses} activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Nav orderCount={ordersData.length} cards={cards} addresses={addresses} activeTab={activeTab} setActiveTab={setActiveTab} />
 
             {/* Right Tab Content */}
             <div className="md:col-span-8 lg:col-span-9 space-y-6">

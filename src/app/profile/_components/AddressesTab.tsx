@@ -1,25 +1,90 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2 } from "lucide-react";
+import { AlertCircleIcon, MapPinHouse, Plus } from "lucide-react";
 import { Address } from "../types";
-import { cn } from "@/lib/utils";
-import { Dispatch, SetStateAction } from "react";
-import { handleSetDefaultAddress, handleDeleteAddress } from "../utils";
+import { Dispatch, ReactNode, SetStateAction } from "react";
+import { useAddress } from "@/hooks/useAddress";
+import { AddressCard } from "./AddressCard";
 
 interface AddressesTabProps {
   addresses: Address[],
   setIsAddressModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export function AddressesTab({ addresses, setIsAddressModalOpen }: AddressesTabProps) {
+export function AddressesTab({ setIsAddressModalOpen }: AddressesTabProps) {
+  const { addresses, defaultAddress, isLoading, isError } = useAddress();
+
+  // TODO: use dedicated "LoadingTab" componet
+  if (isLoading) {
+    return (
+      <div className="h-full w-full flex justify-center align-center">
+        loading...
+      </div>
+    );
+  };
+
+  // TODO: use dedicated "ErrorTab" component
+  if (isError) {
+    return (
+      <div className="h-full w-full flex justify-center align-center">
+        <span className="text-destructive">
+          <AlertCircleIcon />
+          Error Loading Addresses
+        </span>
+      </div>
+    );
+  };
+
+  // I think that doesn't need it's own component, but it needs improvement
+  // TODO: improve that!
+  if (addresses.length < 1) {
+    return (
+      <Container addressCount={addresses.length} setIsAddressModalOpen={setIsAddressModalOpen} >
+        <div className="py-16 text-center rounded-xl border border-dashed border-border bg-muted/10">
+          <MapPinHouse className="size-8 mx-auto text-muted-foreground mb-3" />
+          <p className="text-base font-semibold text-foreground">You have no addresses saved</p>
+          <p className="text-xs text-muted-foreground mt-1 mb-6">
+            save your first address for a quicker checkout process
+          </p>
+          <Button
+            size="sm"
+            className="uppercase tracking-wider text-xs font-semibold cursor-pointer"
+            onClick={() => setIsAddressModalOpen(true)}
+          >
+            Add Address
+          </Button>
+        </div>
+      </Container>
+    )
+  }
+
+  return (
+    <Container addressCount={addresses.length} setIsAddressModalOpen={setIsAddressModalOpen}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {defaultAddress && <AddressCard addr={defaultAddress} />}
+
+        {addresses.map((addr) => (
+          <AddressCard key={addr.id} addr={addr} />
+        ))}
+      </div>
+    </Container>
+  );
+}
+
+
+interface containerProps {
+  children: ReactNode,
+  addressCount: number,
+  setIsAddressModalOpen: Dispatch<SetStateAction<boolean>>
+}
+function Container({ children, addressCount, setIsAddressModalOpen }: containerProps) {
   return (
     <div className="space-y-6 animate-in fade-in-50 duration-300">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Saved Addresses
+            Saved Addresses ({addressCount})
           </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
             Manage your shipping and billing delivery destinations
@@ -28,66 +93,13 @@ export function AddressesTab({ addresses, setIsAddressModalOpen }: AddressesTabP
         <Button
           size="sm"
           onClick={() => setIsAddressModalOpen(true)}
-          className="gap-1.5 uppercase tracking-wider text-xs font-semibold"
+          className="gap-1.5 uppercase tracking-wider text-xs font-semibold cursor-pointer"
         >
           <Plus className="size-4" /> Add Address
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {addresses.map((addr) => (
-          <div
-            key={addr.id}
-            className={cn(
-              "rounded-xl border p-5 bg-card flex flex-col justify-between transition-all",
-              addr.isDefault
-                ? "border-primary ring-1 ring-primary/40 shadow-xs"
-                : "border-border hover:border-foreground/30"
-            )}
-          >
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="font-bold text-sm text-foreground">{addr.name}</span>
-                {addr.isDefault && (
-                  <Badge variant="secondary" className="text-[10px] font-semibold uppercase">
-                    Default Shipping
-                  </Badge>
-                )}
-              </div>
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>{addr.street}</p>
-                {addr.apt && <p>{addr.apt}</p>}
-                <p>
-                  {addr.city}, {addr.state} {addr.zip}
-                </p>
-                <p>{addr.country}</p>
-              </div>
-            </div>
-
-            <div className="mt-5 pt-3 border-t border-border flex items-center justify-between text-xs">
-              {!addr.isDefault && (
-                <button
-                  type="button"
-                  onClick={() => handleSetDefaultAddress(addr.id)}
-                  className="text-primary hover:underline font-medium"
-                >
-                  Set as Default
-                </button>
-              )}
-              <div className="flex items-center gap-3 ml-auto">
-                <button
-                  type="button"
-                  onClick={() => handleDeleteAddress(addr.id)}
-                  className="text-muted-foreground hover:text-red-500 transition-colors"
-                  aria-label="Delete address"
-                >
-                  <Trash2 className="size-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {children}
     </div>
   );
 }

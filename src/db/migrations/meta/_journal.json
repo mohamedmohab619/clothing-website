@@ -43,6 +43,55 @@
       "when": 1789856578213,
       "tag": "20260919222258_perfect_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790021270240,
+      "tag": "20260921200750_round_leo",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790174664897,
+      "tag": "20260923144424_curved_lockjaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1790180214796,
+      "tag": "20260923161654_glossy_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1790183384904,
+      "tag": "20260923170944_clean_supreme_intelligence",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1790197504335,
+      "tag": "20260923210504_careless_the_santerians",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1790266809299,
+      "tag": "20260924162009_lying_black_widow",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1790272618773,
+      "tag": "20260924175658_calm_famine",
+      "breakpoints": true
     }
   ]
 }

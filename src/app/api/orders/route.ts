@@ -20,6 +20,7 @@ const initialItem = z.object({
   color: z.string().min(2),
   size: z.string().min(1),
   quantity: z.number().gt(0),
+  image: z.string().nullable(),
 });
 
 const requestSchema = z.object({
@@ -57,6 +58,7 @@ export const POST = withErrorHandling(async (req: NextRequest) => {
         size: foundVariant.size,
         unitPrice: foundVariant.price,
         quantity: i.quantity,
+        image: i.image
       };
 
       return newOrdrItem;

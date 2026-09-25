@@ -261,6 +261,7 @@ export default function CheckoutPage() {
         color: i.selectedColor,
         size: i.selectedSize,
         quantity: i.quantity,
+        image: i.image,
       })
     })
 

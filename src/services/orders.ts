@@ -1,7 +1,7 @@
 import { getDB } from "@/db";
 import { orderItems, orders } from "@/db/schema";
 import { NewOrder, NewOrderItem } from "@/db/types";
-import { eq, SQL } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 export async function getOrders() {
   const db = getDB()
@@ -18,6 +18,16 @@ export async function getOrderById(id: number) {
   });
 
   return result;
+}
+
+export async function getOrdersByUserId(userId: string) {
+  const db = getDB();
+
+  return await db.query.orders.findMany({
+    where: eq(orders.userId, userId),
+    orderBy: desc(orders.createdAt),
+    with: { items: true },
+  })
 }
 
 export async function createOrder(data: NewOrder) {

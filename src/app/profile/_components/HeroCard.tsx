@@ -8,16 +8,24 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, LogOut, MapPin, Package, Sparkles } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { useFavorites } from "@/context/FavoritesContext";
+import { authClient } from "@/lib/auth/auth-client";
+import { useRouter } from "next/navigation";
+import { useAddress } from "@/hooks/useAddress";
 
 interface HeroCardProps {
   user: UserData,
-  orders: Order[],
+  orderCount: number,
+  ordersInTransit: number,
   addresses: Address[],
   setActiveTab: Dispatch<SetStateAction<TabKey>>
 };
 
-export function HeroCard({ user, orders, addresses, setActiveTab }: HeroCardProps) {
+export function HeroCard({ user, orderCount, ordersInTransit, addresses, setActiveTab }: HeroCardProps) {
+  const router = useRouter();
   const { favoritesCount } = useFavorites();
+
+
+  const { addressCount, defaultAddress } = useAddress();
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs mb-8">
@@ -40,8 +48,7 @@ export function HeroCard({ user, orders, addresses, setActiveTab }: HeroCardProp
             </div>
             <p className="text-sm text-muted-foreground mt-1">{user.email}</p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Member since January 2024 &bull; 450 Reward Points
-              Member since Jan 22nd 2026
+              Member since {user.createdAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
             </p>
           </div>
         </div>
@@ -55,12 +62,18 @@ export function HeroCard({ user, orders, addresses, setActiveTab }: HeroCardProp
           </Link>
           <Button
             size="sm"
-            onClick={() => {
-              localStorage.removeItem("aven_user_profile");
-              toast.success("Logged out successfully");
+            onClick={async () => {
+              await authClient.signOut({
+                fetchOptions: {
+                  onSuccess: () => {
+                    toast.success("Logged out successfully");
+                    router.push("/");
+                  }
+                }
+              })
             }}
             variant="ghost"
-            className="text-xs text-muted-foreground hover:text-red-600 gap-1.5"
+            className="text-xs text-muted-foreground hover:text-red-600 gap-1.5 cursor-pointer"
           >
             <LogOut className="size-4" /> Sign Out
           </Button>
@@ -77,9 +90,9 @@ export function HeroCard({ user, orders, addresses, setActiveTab }: HeroCardProp
             <Package className="size-4 text-primary" />
             <span>Total Orders</span>
           </div>
-          <p className="text-xl font-bold text-foreground mt-1.5">{orders.length}</p>
+          <p className="text-xl font-bold text-foreground mt-1.5">{orderCount}</p>
           <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">
-            1 in transit
+            {ordersInTransit ? `${ordersInTransit} in transit` : "All orders delivered"}
           </p>
         </div>
 
@@ -103,8 +116,8 @@ export function HeroCard({ user, orders, addresses, setActiveTab }: HeroCardProp
             <MapPin className="size-4 text-primary" />
             <span>Saved Addresses</span>
           </div>
-          <p className="text-xl font-bold text-foreground mt-1.5">{addresses.length}</p>
-          <p className="text-[11px] text-muted-foreground mt-0.5">Default: Los Angeles</p>
+          <p className="text-xl font-bold text-foreground mt-1.5">{addressCount || 0}</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">Default: {defaultAddress?.label}</p>
         </div>
 
         <div className="p-3.5 rounded-xl border border-border/80 bg-muted/20">
