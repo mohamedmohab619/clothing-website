@@ -12,6 +12,7 @@ import { useFavorites } from "@/context/FavoritesContext";
 import CartSidebar from "@/components/CartSidebar";
 import SearchOverlay from "@/components/SearchOverlay";
 import { UserAvatar } from "./UserAvatar";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 const navLinks = [
   { href: "/products?category=men", label: "Men" },
@@ -173,6 +174,8 @@ export default function Header() {
             {/* > */}
             {/*   <User className="size-5" strokeWidth={1.5} /> */}
             {/* </Button> */}
+
+            <ThemeSwitcher />
 
             <UserAvatar />
 
