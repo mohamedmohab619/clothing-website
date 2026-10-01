@@ -2,18 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import { AlertCircleIcon, MapPinHouse, Plus } from "lucide-react";
-import { Address } from "../types";
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { useAddress } from "@/hooks/useAddress";
+import { useAddresses } from "@/hooks/useAddresses";
 import { AddressCard } from "./AddressCard";
 
 interface AddressesTabProps {
-  addresses: Address[],
   setIsAddressModalOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export function AddressesTab({ setIsAddressModalOpen }: AddressesTabProps) {
-  const { addresses, defaultAddress, isLoading, isError } = useAddress();
+  const { addresses, defaultAddress, isLoading, isError } = useAddresses();
 
   // TODO: use dedicated "LoadingTab" componet
   if (isLoading) {

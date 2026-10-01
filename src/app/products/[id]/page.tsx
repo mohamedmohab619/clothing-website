@@ -13,6 +13,7 @@ import RecentlyViewed from "@/components/RecentlyViewed";
 import { Button } from "@/components/ui/button";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import { UIColorOption, UIProduct } from "@/lib/products/types";
+import { useProduct } from "@/hooks/useProduct";
 
 export default function ProductPage() {
   const params = useParams();
@@ -22,9 +23,8 @@ export default function ProductPage() {
   const pathname = usePathname();
   const { addRecentlyViewed } = useRecentlyViewed();
 
-  const [product, setProduct] = useState<UIProduct | null>(null);
   const [selectedColorOption, setSelectedColorOption] = useState<UIColorOption | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState(true);
+  const { product, isLoading } = useProduct(id);
 
   // Track product in recently viewed when loaded
   useEffect(() => {
@@ -34,39 +34,16 @@ export default function ProductPage() {
   }, [product, addRecentlyViewed]);
 
   useEffect(() => {
-    if (!id) return;
-    let isMounted = true;
-    setIsLoading(true);
+    if (!product) return;
 
-    fetch(`/api/products/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (isMounted && res.success && res.data) {
-          const fetchedProduct: UIProduct = res.data;
-          setProduct(fetchedProduct);
+    const requestedCoption = searchParams.get("coption")?.toLowerCase();
+    const matchedOption =
+      product.colorOptions?.find(
+        (opt) => opt.name.toLowerCase() === requestedCoption
+      ) || product.colorOptions?.[0];
 
-          const requestedCoption = searchParams.get("coption")?.toLowerCase();
-          const matchedOption = fetchedProduct.colorOptions?.find(
-            (opt) => opt.name.toLowerCase() === requestedCoption
-          ) || fetchedProduct.colorOptions?.[0];
-
-          setSelectedColorOption(matchedOption);
-        } else if (isMounted) {
-          setProduct(null);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to fetch product:", err);
-        if (isMounted) setProduct(null);
-      })
-      .finally(() => {
-        if (isMounted) setIsLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [id]);
+    setSelectedColorOption(matchedOption);
+  }, [product, searchParams]);
 
   // Sync color when user navigates with browser back/forward buttons
   useEffect(() => {

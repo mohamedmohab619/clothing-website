@@ -5,7 +5,7 @@ import { fetcher } from '@/lib/fetcher';
 import { Address } from '@/db/types';
 
 
-export function useAddress() {
+export function useAddresses() {
   const { data, error, isLoading } = useSWR<Address[]>("/api/me/addresses", fetcher);
 
   return {

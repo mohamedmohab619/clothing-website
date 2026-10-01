@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
-import { TabKey, OrderItem, Order, Address, SavedCard } from "./types";
-import { INITIAL_ORDERS, INITIAL_ADDRESSES, INITIAL_CARDS } from "./data";
+import { TabKey, Order, SavedCard } from "./types";
+import { INITIAL_CARDS } from "./data";
 import { ProfileLoading } from "./_components/ProfileLoading";
 import { HeroCard } from "./_components/HeroCard";
 import { Nav } from "./_components/Nav";
@@ -18,17 +18,14 @@ import { SettingsTab } from "./_components/SettingsTab";
 import { AddressModal } from "./_components/AddressModal";
 import { CardModal } from "./_components/CardModal";
 import { OrderTrackingDialog } from "./_components/OrderTrackingDialog";
-import { toast } from "sonner";
 
 export default function ProfilePage() {
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<TabKey>("orders");
 
-  // Addresses & Cards
-  const [addresses, setAddresses] = useState<Address[]>(INITIAL_ADDRESSES);
+  // Cards
   const [cards, setCards] = useState<SavedCard[]>(INITIAL_CARDS);
-  const [orders] = useState<Order[]>(INITIAL_ORDERS);
 
   // Modals
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -37,20 +34,6 @@ export default function ProfilePage() {
 
   // session checking
   const { data: sessionData, isPending } = authClient.useSession();
-
-  // Orders Data
-  const [ordersData, setOrdersData] = useState([]);
-
-  useEffect(() => {
-    fetch(`/api/me/orders`)
-      .then(res => res.json())
-      .then(res => {
-        setOrdersData(res);
-      }).catch((error) => {
-        toast.error("Error to fetch orders");
-        console.error("Failed to fetch orders", error);
-      })
-  }, []);
 
   if (isPending) return <ProfileLoading />
 
@@ -72,23 +55,23 @@ export default function ProfilePage() {
           </nav>
 
           {/* Profile Hero Card */}
-          <HeroCard user={sessionData.user} orderCount={ordersData.length} ordersInTransit={0} addresses={addresses} setActiveTab={setActiveTab} />
+          <HeroCard user={sessionData.user} ordersInTransit={0} setActiveTab={setActiveTab} />
 
           {/* Main Content Layout: Sidebar Tabs + Active Content */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-5">
             {/* Left Nav Menu */}
-            <Nav orderCount={ordersData.length} cards={cards} addresses={addresses} activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Nav cards={cards} activeTab={activeTab} setActiveTab={setActiveTab} />
 
             {/* Right Tab Content */}
             <div className="md:col-span-8 lg:col-span-9 space-y-6">
               {/* TAB 1: ORDERS */}
-              {activeTab === "orders" && <OrdersTab orders={orders} setTrackingOrder={setTrackingOrder} />}
+              {activeTab === "orders" && <OrdersTab />}
 
               {/* TAB 2: PERSONAL INFORMATION */}
               {activeTab === "personal" && <PersonalTab user={sessionData.user} />}
 
               {/* TAB 3: SAVED ADDRESSES */}
-              {activeTab === "addresses" && <AddressesTab addresses={addresses} setIsAddressModalOpen={setIsAddressModalOpen} />}
+              {activeTab === "addresses" && <AddressesTab setIsAddressModalOpen={setIsAddressModalOpen} />}
 
               {/* TAB 4: PAYMENT METHODS */}
               {activeTab === "payments" && <PaymentMethodsTab cards={cards} setCards={setCards} setIsCardModalOpen={setIsCardModalOpen} />}

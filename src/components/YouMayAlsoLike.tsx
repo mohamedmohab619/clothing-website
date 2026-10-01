@@ -1,28 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
-import type { UIProduct } from "@/lib/products/types";
+import { useProducts } from "@/hooks/useProducts";
 
 export default function YouMayAlsoLike({ currentProductId }: { currentProductId?: string }) {
-  const [products, setProducts] = useState<UIProduct[]>([]);
+  const { products: allProducts } = useProducts();
 
-  useEffect(() => {
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success && Array.isArray(res.data)) {
-          const filtered = res.data
-            .filter((p: UIProduct) => p.id !== currentProductId && p.slug !== currentProductId)
-            .slice(0, 4);
-          setProducts(filtered);
-        }
-      })
-      .catch((err) => console.error("Error fetching related products:", err));
-  }, [currentProductId]);
-
+  const products = useMemo(
+    () =>
+      allProducts
+        .filter((p) => p.id !== currentProductId && p.slug !== currentProductId)
+        .slice(0, 4),
+    [allProducts, currentProductId]
+  );
   if (products.length === 0) {
     return null;
   }

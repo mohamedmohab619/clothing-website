@@ -20,40 +20,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState, useEffect } from "react";
 import type { UIProduct, UIColorOption } from "@/lib/products/types";
+import { useProducts } from "@/hooks/useProducts";
 
 function ProductsContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [productsList, setProductsList] = useState<UIProduct[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    let isMounted = true;
-    setIsLoading(true);
-
-    const query = searchParams.toString();
-    fetch(`/api/products?${query}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (isMounted && res.success && Array.isArray(res.data)) {
-          setProductsList(res.data);
-        }
-      })
-      .catch((err) => {
-        console.error("Failed to fetch products:", err);
-      })
-      .finally(() => {
-        if (isMounted) setIsLoading(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [searchParams]);
+  const { products, isLoading } = useProducts(searchParams.toString());
 
   const removeQueryParam = (key: string, valueToRemove?: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -85,7 +60,7 @@ function ProductsContent() {
     key: string;
   };
 
-  const productCards: ProductCardItem[] = productsList.flatMap((product): ProductCardItem[] =>
+  const productCards: ProductCardItem[] = products.flatMap((product): ProductCardItem[] =>
     product.colorOptions && product.colorOptions.length > 0
       ? product.colorOptions.map((option) => ({
         product,

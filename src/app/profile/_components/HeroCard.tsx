@@ -10,22 +10,21 @@ import { Dispatch, SetStateAction } from "react";
 import { useFavorites } from "@/context/FavoritesContext";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
-import { useAddress } from "@/hooks/useAddress";
+import { useAddresses } from "@/hooks/useAddresses";
+import { useOrders } from "@/hooks/useOrders";
 
 interface HeroCardProps {
   user: UserData,
-  orderCount: number,
   ordersInTransit: number,
-  addresses: Address[],
   setActiveTab: Dispatch<SetStateAction<TabKey>>
 };
 
-export function HeroCard({ user, orderCount, ordersInTransit, addresses, setActiveTab }: HeroCardProps) {
+export function HeroCard({ user, ordersInTransit, setActiveTab }: HeroCardProps) {
   const router = useRouter();
   const { favoritesCount } = useFavorites();
 
-
-  const { addressCount, defaultAddress } = useAddress();
+  const { addressCount, defaultAddress } = useAddresses();
+  const { orderCount } = useOrders();
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-xs mb-8">

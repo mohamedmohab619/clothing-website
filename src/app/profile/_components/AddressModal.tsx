@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircleIcon } from "lucide-react";
 import { AddressFormSchema, TAddressFormSchema } from "@/validation/address";
 import { toast } from "sonner";
-import { useAddress } from "@/hooks/useAddress";
+import { useAddresses } from "@/hooks/useAddresses";
 import { Checkbox } from "@/components/ui/checkbox";
 import { mutate } from "swr";
 
