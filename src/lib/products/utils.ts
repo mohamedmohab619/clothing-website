@@ -74,7 +74,7 @@ export function formatProductForUI(product: ProductWithRelations): UIProduct {
   }
 
   return {
-    id: String(product.id),
+    id: product.id,
     slug: product.slug,
     title: product.name,
     name: product.name,

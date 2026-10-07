@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Clock, Trash2 } from "lucide-react";
 
 type RecentlyViewedProps = {
-  currentProductId?: string;
+  currentProductId?: number;
   limit?: number;
 };
 
@@ -20,7 +20,7 @@ export default function RecentlyViewed({
   const displayedProducts = recentlyViewed
     .filter((p) => {
       if (!currentProductId) return true;
-      return p.id !== currentProductId && p.slug !== currentProductId;
+      return p.id !== currentProductId;
     })
     .slice(0, limit);
 

@@ -9,9 +9,11 @@ import {
   primaryKey,
   jsonb,
   index,
-  date
+  uniqueIndex,
+  unique,
+  check
 } from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 // define timestamps and import them in every table
 const timestamps = {
@@ -215,6 +217,54 @@ export const productCollectionsRelations = relations(productCollections, ({ one 
   collection: one(collections, {
     fields: [productCollections.collectionId],
     references: [collections.id]
+  }),
+}));
+
+// [______ Orders System ______]
+export const cartStatus = pgEnum("cart_status", ["active", "converted", "abandoned"]);
+
+export const carts = pgTable("carts", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }), // nullable = guest cart
+  sessionId: text("session_id"),                  // guest identifier (cookie)
+  status: cartStatus("status").notNull().default("active"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (t) => [
+  // at most one active cart per user / per guest session
+  uniqueIndex("one_active_cart_per_user").on(t.userId).where(sql`${t.status} = 'active' and ${t.userId} is not null`),
+  uniqueIndex("one_active_cart_per_session").on(t.sessionId).where(sql`${t.status} = 'active' and ${t.sessionId} is not null`),
+]);
+
+export const cartItems = pgTable("cart_items", {
+  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+  cartId: integer("cart_id").notNull().references(() => carts.id, { onDelete: "cascade" }),
+  variantId: integer("variant_id").notNull().references(() => variants.id),
+  image: varchar('image', { length: 508 }),
+  quantity: integer("quantity").notNull().default(1),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (t) => [
+  unique("cart_variant_unique").on(t.cartId, t.variantId), // same variant = bump quantity, not a new row
+  check("quantity_positive", sql`${t.quantity} > 0`),
+]);
+
+export const cartRelations = relations(carts, ({ one, many }) => ({
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+  items: many(cartItems),
+}));
+
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  cart: one(carts, {
+    fields: [cartItems.cartId],
+    references: [carts.id],
+  }),
+  variant: one(variants, {
+    fields: [cartItems.variantId],
+    references: [variants.id],
   }),
 }));
 

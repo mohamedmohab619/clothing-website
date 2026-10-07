@@ -8,25 +8,26 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useFavorites, type FavoriteItem } from "@/context/FavoritesContext";
-import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
+import { useCartFetcher } from "@/hooks/useCart";
 
 export default function FavoritesPage() {
   const { favorites, favoritesCount, removeFromFavorites, clearFavorites } = useFavorites();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
+  const { addToCart } = useCartFetcher();
 
   const handleAddToCart = (item: FavoriteItem) => {
     const numericPrice = item.rawPrice ?? parseFloat(item.price.replace(/[^0-9.-]+/g, "")) ?? 39.99;
 
-    addToCart({
-      id: item.id,
-      title: item.title,
-      price: numericPrice,
-      image: item.image,
-      quantity: 1,
-      selectedColor: item.selectedColor,
-      selectedSize: item.selectedSize || "M",
-    });
+    // addToCart({
+    //   productId: item.id,
+    //   title: item.title,
+    //   price: numericPrice,
+    //   image: item.image,
+    //   quantity: 1,
+    //   selectedColor: item.selectedColor || "color",
+    //   selectedSize: item.selectedSize || "M",
+    // });
 
     toast.success("Added to cart", {
       description: `${item.title}${item.selectedColor ? ` (${item.selectedColor})` : ""}`,
@@ -38,15 +39,15 @@ export default function FavoritesPage() {
 
     favorites.forEach((item) => {
       const numericPrice = item.rawPrice ?? parseFloat(item.price.replace(/[^0-9.-]+/g, "")) ?? 39.99;
-      addToCart({
-        id: item.id,
-        title: item.title,
-        price: numericPrice,
-        image: item.image,
-        quantity: 1,
-        selectedColor: item.selectedColor,
-        selectedSize: item.selectedSize || "M",
-      });
+      // addToCart({
+      //   productId: item.id,
+      //   title: item.title,
+      //   price: numericPrice,
+      //   image: item.image,
+      //   quantity: 1,
+      //   selectedColor: item.selectedColor || "color",
+      //   selectedSize: item.selectedSize || "M",
+      // });
     });
 
     toast.success("Added all items to cart!", {
@@ -134,10 +135,9 @@ export default function FavoritesPage() {
           /* Favorites Grid */
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-16">
             {favorites.map((item) => {
-              const productIdentifier = item.slug || item.id;
-              const productHref = `/products/${productIdentifier}${
-                item.selectedColor ? `?coption=${encodeURIComponent(item.selectedColor)}` : ""
-              }`;
+              const productIdentifier = item.id;
+              const productHref = `/products/${productIdentifier}${item.selectedColor ? `?coption=${encodeURIComponent(item.selectedColor)}` : ""
+                }`;
 
               return (
                 <article

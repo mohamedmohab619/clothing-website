@@ -11,7 +11,7 @@ import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
 import type { UIColorOption } from "@/lib/products/types";
 
 type ProductCardProps = {
-  id: string;
+  id: number;
   slug: string;
   title: string;
   price: string;
@@ -44,7 +44,7 @@ export default function ProductCard({
 
   const activeColorName = selectedColorOption?.name || colors?.[0];
   const displayImage = selectedColorOption?.images?.[0] || image;
-  const productIdentifier = slug || id;
+  const productIdentifier = id;
   const isItemFavorited = checkIsFavorite(productIdentifier, activeColorName) || checkIsFavorite(id, activeColorName);
 
   const handleRecordView = () => {

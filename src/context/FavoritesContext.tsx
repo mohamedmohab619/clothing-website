@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import type { UIColorOption } from "@/lib/products/types";
 
 export type FavoriteItem = {
-  id: string;
+  id: number;
   slug?: string;
   title: string;
   price: string;
@@ -20,9 +20,9 @@ export type FavoriteItem = {
 type FavoritesContextType = {
   favorites: FavoriteItem[];
   favoritesCount: number;
-  isFavorite: (idOrSlug: string, colorName?: string) => boolean;
-  toggleFavorite: (product: Partial<FavoriteItem> & { id: string; title: string; image: string }, selectedOption?: UIColorOption) => void;
-  removeFromFavorites: (idOrSlug: string, colorName?: string) => void;
+  isFavorite: (id: number, colorName?: string) => boolean;
+  toggleFavorite: (product: Partial<FavoriteItem> & { id: number; title: string; image: string }, selectedOption?: UIColorOption) => void;
+  removeFromFavorites: (id: number, colorName?: string) => void;
   clearFavorites: () => void;
 };
 
@@ -52,10 +52,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
   }, [favorites, isMounted]);
 
-  const isFavorite = (idOrSlug: string, colorName?: string): boolean => {
-    if (!idOrSlug) return false;
+  const isFavorite = (id: number, colorName?: string): boolean => {
+    if (!id) return false;
     return favorites.some((item) => {
-      const idMatch = item.id === idOrSlug || (item.slug && item.slug === idOrSlug);
+      const idMatch = item.id === id;
       if (!idMatch) return false;
       if (colorName && item.selectedColor) {
         return item.selectedColor.toLowerCase() === colorName.toLowerCase();
@@ -65,7 +65,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   };
 
   const toggleFavorite = (
-    product: Partial<FavoriteItem> & { id: string; title: string; image: string },
+    product: Partial<FavoriteItem> & { id: number; title: string; image: string },
     selectedOption?: UIColorOption
   ) => {
     const activeColor = selectedOption?.name || product.selectedColor || product.colorOptions?.[0]?.name;
@@ -109,10 +109,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const removeFromFavorites = (idOrSlug: string, colorName?: string) => {
+  const removeFromFavorites = (id: number, colorName?: string) => {
     setFavorites((prev) => {
       const itemToRemove = prev.find((item) => {
-        const idMatch = item.id === idOrSlug || (item.slug && item.slug === idOrSlug);
+        const idMatch = item.id === id;
         if (!idMatch) return false;
         if (colorName && item.selectedColor) {
           return item.selectedColor.toLowerCase() === colorName.toLowerCase();
@@ -127,7 +127,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       }
 
       return prev.filter((item) => {
-        const idMatch = item.id === idOrSlug || (item.slug && item.slug === idOrSlug);
+        const idMatch = item.id === id;
         if (!idMatch) return true;
         if (colorName && item.selectedColor) {
           return item.selectedColor.toLowerCase() !== colorName.toLowerCase();

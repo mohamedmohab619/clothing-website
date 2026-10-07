@@ -3,7 +3,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Minus, Plus, Trash2, X } from "lucide-react";
-import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import {
   SheetContent,
@@ -11,9 +10,11 @@ import {
   SheetTitle,
   SheetFooter,
 } from "@/components/ui/sheet";
+import { useCartFetcher } from "@/hooks/useCart";
 
 export default function CartSidebar() {
-  const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal } = useCart();
+  // const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal } = useCart();
+  const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal } = useCartFetcher();
 
   return (
     <SheetContent side="right" showCloseButton={false} className="w-full sm:max-w-md flex flex-col h-full pl-6">
@@ -48,11 +49,11 @@ export default function CartSidebar() {
         ) : (
           <ul className="space-y-6 pr-4">
             {cartItems.map((item) => (
-              <li key={`${item.id}-${item.selectedColor}-${item.selectedSize}`} className="flex gap-4 border-b border-border pb-4">
+              <li key={`${item.variantId}-${item.variant.colorName}-${item.variant.size}`} className="flex gap-4 border-b border-border pb-4">
                 <div className="relative h-24 w-20 overflow-hidden rounded-md bg-muted shrink-0">
                   <Image
                     src={item.image}
-                    alt={item.title}
+                    alt={item.variant.product.name}
                     fill
                     className="object-cover"
                     sizes="80px"
@@ -61,13 +62,13 @@ export default function CartSidebar() {
                 <div className="flex flex-col flex-1 justify-between">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-medium text-foreground text-sm line-clamp-1">{item.title}</h3>
+                      <h3 className="font-medium text-foreground text-sm line-clamp-1">{item.variant.product.name}</h3>
                       <p className="mt-1 text-xs text-muted-foreground space-x-2">
-                        {item.selectedColor && <span>Color: {item.selectedColor}</span>}
-                        {item.selectedSize && <span>Size: {item.selectedSize}</span>}
+                        {item.variant.colorName && <span>Color: {item.variant.colorName}</span>}
+                        {item.variant.size && <span>Size: {item.variant.size}</span>}
                       </p>
                     </div>
-                    <p className="font-semibold text-sm text-foreground shrink-0">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-sm text-foreground shrink-0">${((item.variant.price / 100) * item.quantity).toFixed(2)}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-2">
@@ -76,7 +77,7 @@ export default function CartSidebar() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-none"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedColor, item.selectedSize)}
+                        onClick={() => updateQuantity(item.variantId, item.quantity - 1, item.variant.colorName, item.variant.size)}
                       >
                         <Minus className="size-3 text-muted-foreground" />
                       </Button>
@@ -85,7 +86,7 @@ export default function CartSidebar() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-none"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedColor, item.selectedSize)}
+                        onClick={() => updateQuantity(item.variantId, item.quantity + 1, item.variant.colorName, item.variant.size)}
                       >
                         <Plus className="size-3 text-muted-foreground" />
                       </Button>
@@ -95,7 +96,7 @@ export default function CartSidebar() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={() => removeFromCart(item.id, item.selectedColor, item.selectedSize)}
+                      onClick={() => removeFromCart(item.variantId, item.variant.colorName, item.variant.size)}
                     >
                       <Trash2 className="size-4" />
                     </Button>
@@ -112,7 +113,7 @@ export default function CartSidebar() {
           <div className="space-y-1.5 w-full">
             <div className="flex justify-between text-sm text-muted-foreground">
               <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>${cartTotal?.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-sm text-muted-foreground">
               <span>Taxes & Shipping</span>
@@ -120,7 +121,7 @@ export default function CartSidebar() {
             </div>
             <div className="flex justify-between font-bold text-foreground pt-2">
               <span>Total</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>${cartTotal?.toFixed(2)}</span>
             </div>
           </div>
           <SheetClose render={

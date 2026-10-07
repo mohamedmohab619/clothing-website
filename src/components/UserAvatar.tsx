@@ -105,12 +105,11 @@ export function UserAvatar() {
             Profile
           </DropdownMenuItem>
 
-
           {/* Organizations Button */}
-          <DropdownMenuItem className="cursor-pointer" render={<Link href="/organizations" />}>
-            <IconUsers />
-            Organizations
-          </DropdownMenuItem>
+          {/* <DropdownMenuItem className="cursor-pointer" render={<Link href="/organizations" />}> */}
+          {/*   <IconUsers /> */}
+          {/*   Organizations */}
+          {/* </DropdownMenuItem> */}
 
           {/* Admin Button */}
           {/* {isAdmin && */}
@@ -122,14 +121,17 @@ export function UserAvatar() {
           {/*   </DropdownMenuItem> */}
           {/* } */}
 
-          <DropdownMenuItem className="cursor-pointer">
-            <IconCreditCard />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <IconNotification />
-            Notifications
-          </DropdownMenuItem>
+          {/* <DropdownMenuItem className="cursor-pointer"> */}
+          {/*   <IconCreditCard /> */}
+          {/*   Billing */}
+          {/* </DropdownMenuItem> */}
+
+          {/* TODO: notification page? */}
+          {/* <DropdownMenuItem className="cursor-pointer"> */}
+          {/*   <IconNotification /> */}
+          {/*   Notifications */}
+          {/* </DropdownMenuItem> */}
+
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" className="cursor-pointer" onClick={handleLogout}>

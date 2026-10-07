@@ -7,12 +7,12 @@ import { Heart, Menu, Search, ShoppingCart, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import CartSidebar from "@/components/CartSidebar";
 import SearchOverlay from "@/components/SearchOverlay";
 import { UserAvatar } from "./UserAvatar";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { useCartFetcher } from "@/hooks/useCart";
 
 const navLinks = [
   { href: "/products?category=men", label: "Men" },
@@ -31,7 +31,8 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const { cartCount } = useCart();
+  // const { cartCount } = useCart();
+  const { cartCount } = useCartFetcher();
   const { favoritesCount } = useFavorites();
   const [underline, setUnderline] = useState<Underline>({ left: 0, width: 0 });
 

@@ -6,13 +6,13 @@ import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import { useProducts } from "@/hooks/useProducts";
 
-export default function YouMayAlsoLike({ currentProductId }: { currentProductId?: string }) {
+export default function YouMayAlsoLike({ currentProductId }: { currentProductId?: number }) {
   const { products: allProducts } = useProducts();
 
   const products = useMemo(
     () =>
       allProducts
-        .filter((p) => p.id !== currentProductId && p.slug !== currentProductId)
+        .filter((p) => p.id !== currentProductId)
         .slice(0, 4),
     [allProducts, currentProductId]
   );

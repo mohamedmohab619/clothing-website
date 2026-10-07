@@ -20,8 +20,6 @@ import {
   Tag,
 } from "lucide-react";
 import { toast } from "sonner";
-
-import { useCart } from "@/context/CartContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -35,6 +33,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { NewOrder } from "@/db/types";
+import { useCartFetcher } from "@/hooks/useCart";
 
 type Step = "shipping" | "payment" | "review" | "success";
 
@@ -67,7 +66,8 @@ const SHIPPING_OPTIONS: Record<
 type PaymentMethod = "card" | "paypal" | "apple_pay" | "cash_on_delivery";
 
 export default function CheckoutPage() {
-  const { cartItems, cartTotal, clearCart } = useCart();
+  // const { cartItems, cartTotal, clearCart } = useCart();
+  const { cartItems, cartTotal, clearCart } = useCartFetcher();
 
   const [currentStep, setCurrentStep] = useState<Step>("shipping");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
 
     cartItems.forEach(i => {
       newItems.push({
-        productId: Number(i.id),
+        productId: Number(i.productId),
         color: i.selectedColor,
         size: i.selectedSize,
         quantity: i.quantity,
@@ -1184,9 +1184,9 @@ export default function CheckoutPage() {
                   </h2>
 
                   <div className="rounded-xl border border-border bg-card divide-y divide-border overflow-hidden">
-                    {cartItems.map((item) => (
+                    {cartItems.map((item, idx) => (
                       <div
-                        key={`${item.id}-${item.selectedColor}-${item.selectedSize}`}
+                        key={`${idx}-${item.selectedColor}-${item.selectedSize}`}
                         className="p-4 flex items-center gap-4"
                       >
                         <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-muted border border-border">
@@ -1267,9 +1267,9 @@ export default function CheckoutPage() {
 
               {/* Items List Thumbnail Accordion / Preview */}
               <div className="space-y-4 max-h-64 overflow-y-auto pr-1">
-                {cartItems.map((item) => (
+                {cartItems.map((item, idx) => (
                   <div
-                    key={`${item.id}-${item.selectedColor}-${item.selectedSize}`}
+                    key={`${idx}-${item.selectedColor}-${item.selectedSize}`}
                     className="flex items-center gap-3.5 border-b border-border/60 pb-4 last:border-0 last:pb-0"
                   >
                     <div className="relative size-14 shrink-0 overflow-hidden rounded-md bg-muted border border-border">

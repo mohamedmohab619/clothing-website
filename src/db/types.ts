@@ -9,6 +9,8 @@ import type {
   orderItems,
   users,
   addresses,
+  carts,
+  cartItems,
 } from "./schema";
 
 // [______ User _______]
@@ -39,6 +41,15 @@ export type ProductCollection = InferSelectModel<typeof productCollections>;
 export type NewProductCollection = InferInsertModel<typeof productCollections>;
 
 export type ProductCollectionWithRelations = ProductCollection & { collection?: Collection; }
+
+// [______ Cart System ______]
+export type Cart = InferSelectModel<typeof carts> & {
+  items: CartItem[]
+}
+export type NewCart = InferInsertModel<typeof carts>
+
+export type CartItem = InferSelectModel<typeof cartItems>
+export type NewCartItem = InferInsertModel<typeof cartItems>
 
 // [______ Orders System ______]
 export type Order = InferSelectModel<typeof orders> & {

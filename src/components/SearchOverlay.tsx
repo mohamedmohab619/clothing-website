@@ -468,7 +468,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                   {products.slice(0, 3).map((product) => {
                     const discount = getDiscountBadge(product);
                     const fitSubtitle = getFitSubtitle(product.title);
-                    const productIdentifier = product.slug || product.id;
+                    const productIdentifier = product.slug;
 
                     return (
                       <article

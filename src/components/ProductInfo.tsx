@@ -16,11 +16,11 @@ import SizeGuideModal from "@/components/SizeGuideModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useCart } from "@/context/CartContext";
 import { useFavorites } from "@/context/FavoritesContext";
 import { toast } from "sonner";
 
 import { UIProduct, UIColorOption } from "@/lib/products/types";
+import { useCartFetcher } from "@/hooks/useCart";
 
 const sizes = ["S", "M", "L", "XL", "XXL"] as const;
 
@@ -64,12 +64,11 @@ type ProductInfoProps = {
 export default function ProductInfo({ product, selectedColorOption, onColorChange }: ProductInfoProps) {
   const [selectedSize, setSelectedSize] = useState<(typeof sizes)[number]>("M");
   const { isFavorite: checkIsFavorite, toggleFavorite } = useFavorites();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
+  const { addToCart } = useCartFetcher();
 
   const activeColorName = selectedColorOption?.name || "None";
-  const favorited =
-    checkIsFavorite(product.slug || product.id, activeColorName) ||
-    checkIsFavorite(product.id, activeColorName);
+  const favorited = checkIsFavorite(product.id, activeColorName);
 
   return (
     <div className="flex flex-col">
@@ -79,8 +78,8 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
         </Badge>
 
         {(product.collections && typeof product.collections[0] == "string")
-          ? product.collections.map(c => (
-            <Badge variant="secondary" className="rounded-lg">{c}</Badge>
+          ? product.collections.map((c, idx) => (
+            <Badge key={idx} variant="secondary" className="rounded-lg">{c}</Badge>
           ))
           : null
         }
@@ -168,15 +167,15 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
           size="lg"
           className="h-12 flex-1 rounded-lg text-sm uppercase tracking-wide transition-transform duration-300 hover:scale-[1.02]"
           onClick={() => {
-            addToCart({
-              id: product.id,
-              title: product.title,
-              price: parseFloat(product.price.replace(/[^0-9.-]+/g, "")),
-              image: selectedColorOption?.images[0] || product.image,
-              quantity: 1,
-              selectedColor: activeColorName,
-              selectedSize,
-            });
+            // addToCart({
+            //   productId: product.id,
+            //   title: product.title,
+            //   price: parseFloat(product.price.replace(/[^0-9.-]+/g, "")),
+            //   image: selectedColorOption?.images[0] || product.image,
+            //   quantity: 1,
+            //   selectedColor: activeColorName,
+            //   selectedSize,
+            // });
             toast.success("Added to cart", {
               description: `${product.title} (${activeColorName}, ${selectedSize})`,
             });

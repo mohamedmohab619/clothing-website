@@ -4,12 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Heart, X } from "lucide-react";
-import { useCart } from "@/context/CartContext";
 import { toast } from "sonner";
 import { useFavorites } from "@/context/FavoritesContext";
+import { useCartFetcher } from "@/hooks/useCart";
 
 export function WishlistTab() {
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
+  const { addToCart } = useCartFetcher();
   const { favorites, favoritesCount, removeFromFavorites } = useFavorites();
 
   return (
@@ -60,7 +61,7 @@ export function WishlistTab() {
                 />
                 <button
                   type="button"
-                  onClick={() => removeFromFavorites(item.slug || item.id, item.selectedColor)}
+                  onClick={() => removeFromFavorites(item.id, item.selectedColor)}
                   className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 hover:bg-background text-foreground transition-colors"
                   aria-label="Remove from wishlist"
                 >
@@ -81,15 +82,15 @@ export function WishlistTab() {
                   <Button
                     size="sm"
                     onClick={() => {
-                      addToCart({
-                        id: item.id,
-                        title: item.title,
-                        price: parseFloat(item.price.replace(/[^0-9.-]+/g, "")),
-                        image: item.image,
-                        quantity: 1,
-                        selectedColor: item.selectedColor,
-                        selectedSize: "M",
-                      });
+                      // addToCart({
+                      //   productId: item.id,
+                      //   title: item.title,
+                      //   price: parseFloat(item.price.replace(/[^0-9.-]+/g, "")),
+                      //   image: item.image,
+                      //   quantity: 1,
+                      //   selectedColor: item.selectedColor || "color",
+                      //   selectedSize: "M",
+                      // });
                       toast.success(`Added "${item.title}" to bag!`);
                     }}
                     className="h-8 text-xs font-semibold uppercase tracking-wider"

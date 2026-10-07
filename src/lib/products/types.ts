@@ -8,7 +8,7 @@ export type UIColorOption = {
 };
 
 export type UIProduct = {
-  id: string;
+  id: number;
   slug: string;
   title: string;
   name: string;

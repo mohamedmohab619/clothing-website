@@ -132,10 +132,10 @@ export default function ProductPage() {
             <ProductTabs />
           </div>
           <div className="mt-16 sm:mt-24">
-            <YouMayAlsoLike currentProductId={product.slug || product.id} />
+            <YouMayAlsoLike currentProductId={product.id} />
           </div>
           <div className="mt-16 sm:mt-24">
-            <RecentlyViewed currentProductId={product.slug || product.id} />
+            <RecentlyViewed currentProductId={product.id} />
           </div>
         </div>
       </main>

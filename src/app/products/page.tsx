@@ -70,7 +70,7 @@ function ProductsContent() {
       : [{
         product,
         option: undefined,
-        key: product.slug || product.id,
+        key: product.slug,
       }]
   );
 
