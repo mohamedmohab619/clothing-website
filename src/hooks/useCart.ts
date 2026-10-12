@@ -91,8 +91,8 @@ export function useCartFetcher() {
     isAuthed ? fetchRemoteCart : async () => readLocalCart()
   );
 
-  console.log("Carts data:");
-  console.log(data);
+  // console.log("Carts data:");
+  // console.log(data);
   const cartItems = data ?? [];
 
   /**
