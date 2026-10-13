@@ -135,7 +135,7 @@ export default function FavoritesPage() {
           /* Favorites Grid */
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mb-16">
             {favorites.map((item) => {
-              const productIdentifier = item.id;
+              const productIdentifier = item.slug;
               const productHref = `/products/${productIdentifier}${item.selectedColor ? `?coption=${encodeURIComponent(item.selectedColor)}` : ""
                 }`;
 

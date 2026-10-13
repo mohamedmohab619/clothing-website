@@ -61,7 +61,7 @@ export function WishlistTab() {
                 />
                 <button
                   type="button"
-                  onClick={() => removeFromFavorites(item.id, item.selectedColor)}
+                  onClick={() => removeFromFavorites(item.slug, item.selectedColor)}
                   className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 hover:bg-background text-foreground transition-colors"
                   aria-label="Remove from wishlist"
                 >
