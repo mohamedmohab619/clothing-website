@@ -44,8 +44,8 @@ export default function ProductCard({
 
   const activeColorName = selectedColorOption?.name || colors?.[0];
   const displayImage = selectedColorOption?.images?.[0] || image;
-  const productIdentifier = id;
-  const isItemFavorited = checkIsFavorite(productIdentifier, activeColorName) || checkIsFavorite(id, activeColorName);
+  const productIdentifier = slug;
+  const isItemFavorited = checkIsFavorite(productIdentifier, activeColorName);
 
   const handleRecordView = () => {
     addRecentlyViewed({

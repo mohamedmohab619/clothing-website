@@ -6,9 +6,9 @@ import { UIProduct } from "@/lib/products/types";
 
 type ProductResponse = { success: boolean; data?: UIProduct };
 
-export function useProduct(id?: string) {
+export function useProduct(slug?: string) {
   const { data, error, isLoading } = useSWR<ProductResponse>(
-    id ? `/api/products/${id}` : null, // null = don't fetch
+    slug ? `/api/products/${slug}` : null, // null = don't fetch
     fetcher
   );
 

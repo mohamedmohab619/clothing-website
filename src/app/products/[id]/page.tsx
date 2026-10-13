@@ -12,15 +12,13 @@ import YouMayAlsoLike from "@/components/YouMayAlsoLike";
 import RecentlyViewed from "@/components/RecentlyViewed";
 import { Button } from "@/components/ui/button";
 import { useRecentlyViewed } from "@/context/RecentlyViewedContext";
-import { UIColorOption, UIProduct } from "@/lib/products/types";
+import { UIColorOption } from "@/lib/products/types";
 import { useProduct } from "@/hooks/useProduct";
 
 export default function ProductPage() {
   const params = useParams();
   const id = params?.id as string;
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
   const { addRecentlyViewed } = useRecentlyViewed();
 
   const [selectedColorOption, setSelectedColorOption] = useState<UIColorOption | undefined>(undefined);

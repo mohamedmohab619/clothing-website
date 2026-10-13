@@ -8,6 +8,7 @@ const parseResult = envSchema.safeParse({
   NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL
 });
 
+console.log("parsing client env vars...");
 if (!parseResult.success) {
   console.warn("client env vars validation error");
   console.error(parseResult.error);

@@ -14,7 +14,11 @@ import { useCartFetcher } from "@/hooks/useCart";
 
 export default function CartSidebar() {
   // const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal } = useCart();
-  const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal } = useCartFetcher();
+  const { cartItems, updateQuantity, removeFromCart, cartCount, cartTotal, isLoading } = useCartFetcher();
+
+  if (isLoading) {
+    return (<p>Loading....</p>)
+  }
 
   return (
     <SheetContent side="right" showCloseButton={false} className="w-full sm:max-w-md flex flex-col h-full pl-6">
@@ -49,11 +53,11 @@ export default function CartSidebar() {
         ) : (
           <ul className="space-y-6 pr-4">
             {cartItems.map((item) => (
-              <li key={`${item.variantId}-${item.variant.colorName}-${item.variant.size}`} className="flex gap-4 border-b border-border pb-4">
+              <li key={`${item.variantId}-${item.variant?.colorName}-${item.variant?.size}`} className="flex gap-4 border-b border-border pb-4">
                 <div className="relative h-24 w-20 overflow-hidden rounded-md bg-muted shrink-0">
                   <Image
                     src={item.image}
-                    alt={item.variant.product.name}
+                    alt={item.variant?.product.name}
                     fill
                     className="object-cover"
                     sizes="80px"
@@ -62,13 +66,13 @@ export default function CartSidebar() {
                 <div className="flex flex-col flex-1 justify-between">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="font-medium text-foreground text-sm line-clamp-1">{item.variant.product.name}</h3>
+                      <h3 className="font-medium text-foreground text-sm line-clamp-1">{item.variant?.product.name}</h3>
                       <p className="mt-1 text-xs text-muted-foreground space-x-2">
-                        {item.variant.colorName && <span>Color: {item.variant.colorName}</span>}
-                        {item.variant.size && <span>Size: {item.variant.size}</span>}
+                        {item.variant?.colorName && <span>Color: {item.variant?.colorName}</span>}
+                        {item.variant?.size && <span>Size: {item.variant?.size}</span>}
                       </p>
                     </div>
-                    <p className="font-semibold text-sm text-foreground shrink-0">${((item.variant.price / 100) * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold text-sm text-foreground shrink-0">${((item.variant?.price / 100) * item.quantity).toFixed(2)}</p>
                   </div>
 
                   <div className="flex items-center justify-between mt-2">
@@ -77,7 +81,7 @@ export default function CartSidebar() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-none"
-                        onClick={() => updateQuantity(item.variantId, item.quantity - 1, item.variant.colorName, item.variant.size)}
+                        onClick={() => updateQuantity(item.variantId, item.quantity - 1, item.variant?.colorName, item.variant?.size)}
                       >
                         <Minus className="size-3 text-muted-foreground" />
                       </Button>
@@ -86,7 +90,7 @@ export default function CartSidebar() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 rounded-none"
-                        onClick={() => updateQuantity(item.variantId, item.quantity + 1, item.variant.colorName, item.variant.size)}
+                        onClick={() => updateQuantity(item.variantId, item.quantity + 1, item.variant?.colorName, item.variant?.size)}
                       >
                         <Plus className="size-3 text-muted-foreground" />
                       </Button>
@@ -96,7 +100,7 @@ export default function CartSidebar() {
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                      onClick={() => removeFromCart(item.variantId, item.variant.colorName, item.variant.size)}
+                      onClick={() => removeFromCart(item.variantId, item.variant?.colorName, item.variant?.size)}
                     >
                       <Trash2 className="size-4" />
                     </Button>
