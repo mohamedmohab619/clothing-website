@@ -167,15 +167,15 @@ export default function ProductInfo({ product, selectedColorOption, onColorChang
           size="lg"
           className="h-12 flex-1 rounded-lg text-sm uppercase tracking-wide transition-transform duration-300 hover:scale-[1.02]"
           onClick={() => {
-            addToCart({
-              productId: product.id,
-              title: product.title,
-              price: parseFloat(product.price.replace(/[^0-9.-]+/g, "")),
-              image: selectedColorOption?.images[0] || product.image,
-              quantity: 1,
-              selectedColor: activeColorName,
-              selectedSize,
-            });
+            // addToCart({
+            //   productId: product.id,
+            //   title: product.title,
+            //   price: parseFloat(product.price.replace(/[^0-9.-]+/g, "")),
+            //   image: selectedColorOption?.images[0] || product.image,
+            //   quantity: 1,
+            //   selectedColor: activeColorName,
+            //   selectedSize,
+            // });
             toast.success("Added to cart", {
               description: `${product.title} (${activeColorName}, ${selectedSize})`,
             });
