@@ -14,15 +14,14 @@ const items = [
     title: "Jeans",
     src: "/images/jeans.jpg",
     href: "/products?category=jeans",
-    className: "min-h-[180px] md:col-start-1 md:row-start-1 md:min-h-[220px]",
+    className: "row-start-3 min-h-[180px] md:col-start-1 md:row-start-1 md:min-h-[220px]",
   },
   {
     id: "hoodies",
     title: "Hoodies",
     src: "/images/hoodie.jpg",
     href: "/products?category=hoodies",
-    className:
-      "col-span-2 row-span-2 min-h-[380px] md:col-span-2 md:col-start-2 md:row-span-2 md:row-start-1 md:min-h-0",
+    className: "col-span-2 row-span-2 row-start-1 min-h-[380px] md:col-span-2 md:col-start-2 md:row-span-2 md:row-start-1 md:min-h-0",
     showDiscover: true,
   },
   {
@@ -30,7 +29,7 @@ const items = [
     title: "Bags",
     src: "/images/bags.jpg",
     href: "/products?category=bags",
-    className: "min-h-[180px] md:col-start-4 md:row-start-1 md:min-h-[220px]",
+    className: "row-start-5 col-start-2 min-h-[180px] md:col-start-4 md:row-start-1 md:min-h-[220px]",
   },
   {
     id: "tshirts",
@@ -38,23 +37,21 @@ const items = [
     src: "/images/tshirts.jpg",
     href: "/products?category=t-shirts",
     className:
-      "row-span-2 min-h-[380px] md:col-start-1 md:row-span-2 md:row-start-2 md:min-h-0",
+      "row-span-2 row-start-4 min-h-[380px] md:col-start-1 md:row-span-2 md:row-start-2 md:min-h-0",
   },
   {
     id: "sneakers",
     title: "Sneakers",
     src: "/images/sneakers.jpg",
     href: "/products?category=sneakers",
-    className:
-      "col-span-2 min-h-[180px] md:col-span-2 md:col-start-2 md:row-start-3 md:min-h-[220px]",
+    className: "col-span-2 row-start-6 min-h-[180px] md:col-span-2 md:col-start-2 md:row-start-3 md:min-h-[220px]",
   },
   {
     id: "jackets",
     title: "Jackets",
     src: "/images/jacket.jpg",
     href: "/products?category=jackets",
-    className:
-      "row-span-2 min-h-[380px] md:col-start-4 md:row-span-2 md:row-start-2 md:min-h-0",
+    className: "row-span-2 row-start-3 col-start-2 min-h-[380px] md:col-start-4 md:row-span-2 md:row-start-2 md:min-h-0",
   },
 ] as const;
 
